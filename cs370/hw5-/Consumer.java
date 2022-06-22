@@ -22,23 +22,25 @@ public class Consumer extends java.lang.Thread {
 
     @Override
     public void run() {
-        int item[];
         synchronized(buff) {
-            if (buff.isEmpty()) {
-                try {
-                    buff.wait();
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
+            for(int i = 0; i < itemAmount; i++) {
+                int item[];
+                if (buff.isEmpty()) {
+                    try {
+                        buff.wait();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
+                item = buff.read();
+                Checksum += item[1];
+                System.out.println("Consumer " + id + " read " + item[1] + " at index " + 
+                            item[0] + " at time " + Coordinator.getTime());
+               // itemAmount -= 1;
+                buff.notify();
             }
-            item = buff.read();
-            Checksum += item[1];
-            System.out.println("Consumer " + id + " read " + item[1] + " at index " + 
-                        item[0] + " at time " + Coordinator.getTime());
-            itemAmount -= 1;
-            buff.notify();
         }
-        if (itemAmount > 0)
-            run();
+        // if (itemAmount > 0)
+        //     run();
     }
 }

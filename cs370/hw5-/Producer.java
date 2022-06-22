@@ -30,28 +30,30 @@ public class Producer extends java.lang.Thread {
 //		---> To generate a value between 0 (inclusive) and 99 (inclusive) using the seeded random  
 //                ---> number generator use the following code :
 //                --->       int variable = randomWithSeed.nextInt(100);
-        int item = randomWithSeed.nextInt(100);
         synchronized(buff) {
-            if (buff.isFull()) {
-                try {
-                    buff.wait();
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
+            for (int i = 0; i < itemAmount; i++) {
+                int item = randomWithSeed.nextInt(100);
+                if (buff.isFull()) {
+                    try {
+                        buff.wait();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                int loc = buff.insert(item);
+                Checksum += item;
+                if ( loc >=0) {
+                    System.out.println("Producer " + id + " inserted " + item + " at index " + 
+                            loc + " at time " + Coordinator.getTime());
+                    // itemAmount -= 1;
+                    buff.notify();
+                } else {
+                    System.out.println("Error occured when inserting");
+                    System.exit(-1);
                 }
             }
-            int loc = buff.insert(item);
-            Checksum += item;
-            if ( loc >=0) {
-                System.out.println("Producer " + id + " inserted " + item + " at index " + 
-                        loc + " at time " + Coordinator.getTime());
-                itemAmount -= 1;
-                buff.notify();
-            } else {
-                System.out.println("Error occured when inserting");
-                System.exit(-1);
-            }
         }
-        if (itemAmount > 0)
-            run();
+        // if (itemAmount > 0)
+        //     run();
     }
 }
