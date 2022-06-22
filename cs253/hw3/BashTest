@@ -1,0 +1,193 @@
+#! /bin/bash
+
+#this is a simple script to test code for HW3
+
+echo "Time to test this code"
+
+#echo -n "Starting with test cases, these should fail. Proceed [y/n]: "
+echo "Starting with the test cases, comment out to test"
+echo "This will fail, Do you want to test that? [Y,n]"
+read input
+if [[ $input == "Y" || $input == "y" ]]; then
+	echo "./hw3"
+	./hw3
+	echo
+	echo "EXPECTING error about no - argument"
+	echo "---"
+	echo "./hw3 test 123 - poem"
+	./hw3 test 123 - poem
+	echo 
+	echo "EXPECTING error about non letters in censor argument"
+	echo "---"
+	echo "./hw3 e1e - poem"
+	./hw3 e1e - poem
+	echo 
+	echo "EXPECTING error about non letters in censor argument"
+	echo "---"
+	echo "./hw3 fail - bad-file_Name"
+	./hw3 fail - bad-file_Name
+	echo
+	echo " EXPECTING error about file not working"
+	echo "---"
+	echo "./hw3 fail fail - poem"
+	./hw3 fail fail - poem
+	echo
+	echo "EXPECTING error about repeated censor arguments"
+	echo "---"
+	echo "./hw3 test -- poem"
+	./hw3 test -- poem
+	echo 
+	echo "EXPECTING error about two - arguments or a nonletter censor"
+	echo "---"
+	echo "./hw3 poem - test - file"
+	./hw3 poem - test - file
+	echo
+	echo "EXPECTING error about too many - arguments"
+	echo "---"
+	echo
+else
+        echo
+	echo "ok starting with the basics"
+	echo 
+fi
+	echo ./hw3 - poem
+	./hw3 - poem
+	echo
+	echo "EXPECTED:"
+	echo "Roses are red"
+	echo "Violets are 13145"
+	echo "This poem is too short"
+	echo
+	echo ./hw3 Violets foo short - poem /etc/hostname
+	./hw3 Violets foo short - poem /etc/hostname
+	echo
+	echo "EXPECTED:"
+	echo "Roses are red"
+	echo "CENSORED are 13145"
+	echo "This poem is too CENSORED"
+	echo "HOST NAME"
+	echo
+	echo "echo 'if (a*a+b*b == c*c) {' | ./hw3 a c -"
+	echo 'if (a*a+b*b == c*c) {' | ./hw3 a c -
+	echo
+	echo "EXPECTED:"
+	echo "if (CENSORED*CENSORED+b*b == CENSORED*CENSORED) {"
+	echo
+	echo "Ok if you made it so far and your input matches the output, good job"
+	echo "-------------------------"
+
+	echo
+	echo "Now this is where the fun begins"
+	echo "./hw3 Roses are red Violets This poem is too short - poem"
+	./hw3 Roses are red Violets This poem is too short - poem
+	echo
+	echo "EXPECTED:"
+	echo "CENSORED CENSORED CENSORED"
+	echo "CENSORED CENSORED 13145"
+	echo "CENSORED CENSORED CENSORED CENSORED CENSORED"
+	echo
+	echo "------------------------"
+	echo
+	echo "These are a test of censoring standard input:"
+	echo
+	echo "echo 'this better not get censored, or I will be 1pissed1' | ./hw3 censored pissed -"
+	echo 'this better not get censored, or I will be 1pissed1' | ./hw3 censored pissed -
+	echo
+	echo "EXPECTED:"
+	echo "this better not get CENSORED, or I will be 1CENSORED1"
+	echo
+	echo "echo -e 'Roses are red\nViolets are 13145\nThis poem is too short' | ./hw3 Violets foo short -"
+	echo -e 'Roses are red\nViolets are 13145\nThis poem is too short' | ./hw3 Violets foo short -
+	echo
+	echo "EXPECTED:"
+	echo "Roses are red"
+	echo "CENSORED are 13145"
+	echo "This poem is too CENSORED"
+	echo
+	echo "echo -e 'Here is a really long line, I am talking a heckin chonker sized line. I dont even thing you will be able to read this all in one go, that would be pretty impressive in my opinion' | ./hw3 heckin chonker pretty -"
+	echo -e 'Here is a really long line, I am talking a heckin chonker sized line. I dont even thing you will be able to read this all in one 
+go, that would be pretty impressive in my opinion' | ./hw3 heckin chonker pretty -
+	echo
+	echo "EXPECTED:"
+	echo "Here is a really long line, I am talking a CENSORED CENSORED sized line. I don't even thing you will be able to read this all in one 
+go, that would be CENSORED impressive in my opinion"
+	echo
+	echo"echo -e 'Here is a really long line, I am talking a heckin chonker sized line. I dont even thing you will be able to read this all in one go, that would be pretty impressive in my opinion' | ./hw3 heckin chonker pretty I thing read go -"
+	echo -e 'Here is a really long line, I am talking a heckin chonker sized line. I dont even thing you will be able to read this all in one go, that would be pretty impressive in my opinion' | ./hw3 heckin chonker pretty I thing read go -
+	echo "EXPECTED:"
+	echo "Here is a really long line, CENSORED am talking a CENSORED CENSORED sized line. CENSORED dont even CENSORED you will be able to CENSORED this all in one CENSORED, that would be CENSORED impressive in my opinion"
+	echo "------------------------"
+	echo
+	echo "This is to test reading from file with no modifying"
+	echo
+	echo "./hw3 - poem"
+	./hw3 - poem
+	echo
+	echo "EXPECTED:"
+	echo "Roses are red"
+	echo "Violets are 13145"
+	echo "This poem is too short"
+	echo
+	echo "./hw3 - /etc/hostname"
+	./hw3 - /etc/hostname
+	echo 
+	echo "EXPECTED:"
+	echo "Your host name goes here, depends on your machine"
+	echo
+	echo "Put these together:"
+	echo "./hw3 - poem /etc/hostname"
+	./hw3 - poem /etc/hostname
+	echo
+	echo "EXPECTED:"
+	echo "Roses are red"
+	echo "Violets are 13145"
+	echo "This poem is too short"
+	echo "HOSTNAME"
+	echo
+	echo "------------------------"
+	echo
+	echo "This will test redirections with < or > "
+	echo
+	echo "./hw3 Roses are - poem > newFileName"
+	./hw3 Roses are - poem > newFileName
+	echo "Inside that new file we made: cat newFileName"
+	cat newFileName
+	echo
+	echo "EXPECTED:"
+	echo "CENSORED CENSORED red"
+	echo "Violets CENSORED 13145"
+	echo "This poem is too short"
+	echo
+	echo "./hw3 red - < newFileName"
+	./hw3 red - < newFileName
+	echo 
+	echo "EXPECTED:"
+	echo "CENSORED CENSORED CENSORED"
+	echo "Violets CENSORED 13145"
+	echo "This poem is too short"
+	echo
+	echo "-------------------------"
+	echo
+	echo "This will test just printing to standard output"
+	echo
+	echo "echo -e 'This is a test\nOf printing\nOne\nLine\nAt a time' | ./hw3 -"
+	echo -e 'This is a test\nOf printing\nOne\nLine\nAt a time' | ./hw3 -
+	echo 
+	echo "EXPECTED:"
+	echo "This is a test"
+	echo "Of printing"
+	echo "One"
+	echo "Line"
+	echo "At a time"
+	echo
+	echo "-------------------------"
+ 
+	
+	
+
+
+
+
+
+
+	

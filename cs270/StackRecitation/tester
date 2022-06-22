@@ -1,0 +1,38 @@
+file factorial.obj
+memory Param x0004
+memory Result x0000
+register R0 x75A1
+register R1 xBE84
+register R2 x20FC
+register R3 x5D13
+register R4 x9AD4
+register R5 xABCD
+register R6 xEF01
+register R7 x28FF
+break set x3029
+continue
+translate Result
+printregs R5
+printregs R6
+printregs R7
+translate x3FEC
+translate x3FED
+translate x3FEE
+translate x3FEF
+translate x3FF0
+translate x3FF1
+translate x3FF2
+translate x3FF3
+translate x3FF4
+translate x3FF5
+translate x3FF6
+translate x3FF7
+translate x3FF8
+translate x3FF9
+translate x3FFA
+translate x3FFB
+translate x3FFC
+translate x3FFD
+translate x3FFE
+translate x3FFF
+quit

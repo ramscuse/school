@@ -1,0 +1,24 @@
+1. 'new' returns a void * because it is creating space that can be used in any way.
+2. When running class.cc the redifined new and delete are only used when creating 
+    a foo object or deleting it. Thus double* p = new double does not print anything.
+3. It does not compile because the operator is private.
+4. It does not compile because it is a deleted function. The = delete at the end states
+    that you don't want it.
+5. The NoNewDelete base class has it's constructors and destructors as protect to prevent
+    an extension to Foo from using them.
+6. The error is caused from converting a pointer to an int that is out of the designated
+    address for foo, into a foo. Making this address out of the range it should be in.
+7. In scrub it uses an ! to clean the memory that was previous occupied because it
+    stands out. It is not a commonly used char thus it is perfect for it.
+8.a) The size of class Foo is 8 and it is the same as a double because Foo only
+        contains a double.
+  b) The size of Bar is 8 and the difference in address for r and s is also 8. This 
+        is because the computer needs space to store the stuff in Bar, which is 8 bytes.
+9. Bar would inhert the redifined new and delete from Foo. If Bar needs more bytes to
+    be allocated for it to be properally stored, you would have to write new 'new' and
+    'delete' functions for Bar.
+10. Pool was significantly shorter. I allocated 1000000000 new Bars and it was completed
+    in 7.35 seconds. However, in the time that it took me to write this, normal.cc is
+    still allocating memory and eventually finished at 209.9 seconds.
+11. This time I lowered it to 1000000, and normal used 34276 bytes while pool only
+    used 11216 bytes.

@@ -1,0 +1,1 @@
+int Prime(int n);

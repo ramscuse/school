@@ -1,0 +1,491 @@
+#! /bin/bash
+
+clear
+
+echo "
+
+ _   _  _    _  _____                                  
+| | | || |  | ||  ___|                                 
+| |_| || |  | ||___ \                                  
+|  _  || |/\| |    \ \                                 
+| | | |\  /\  //\__/ /                                 
+\_____/ \/  \/ \____/ _                _               
+|_   _|         | |  (_)              | |              
+  | |  ___  ___ | |_  _  _ __    __ _ | |_  ___   _ __ 
+  | | / _ \/ __|| __|| || '_ \  / _\` || __|/ _ \ | '__|
+  | ||  __/\__ \| |_ | || | | || (_| || |_| (_) || |   
+  \_/ \___||___/ \__||_||_| |_| \__,_| \__|\___/ |_|"
+echo "                                       made by Ugly
+
+"   	
+	echo "########################################################" 
+	echo                                                                                         
+	echo "first we need to clean up, so we will be removing some files so we don't overwrite stuffs"
+	echo
+	echo "Are you ok with removing the files lim1.txt, lim2.txt, file__1 ... file__3, answer and yourAnswer?"
+	echo
+	echo "If you are currently using those files and don't want to lose them, we will stop"
+	echo "Would you like to remove them to continue? [Y/N]"
+
+	read input
+if [[ $input == "Y" || $input == "y" ]]; then
+        echo
+        echo "ok time to delete those old files:"
+        echo "these are just to hold info, no need to worry about it"
+        echo "rm -f lim1.txt lim2.txt answer yourAnswer file__1 file__2 file__3"
+        rm -f lim1.txt lim2.txt answer yourAnswer file__1 file__2 file__3 pass__1 fail__1
+else
+        echo
+        echo "alright we won't touch those files, you should change their names if you want to use this bash, loser"
+        exit 1done
+fi
+	echo "- - - - - - - - - - - - - - - - - - - - - - - -"
+	echo
+	echo "This Bash script will test inputs with expected outputs"
+	echo "Each test will either Pass or Fail. A fail will show more details"
+	echo
+	echo "########################################################"
+	echo
+	echo "First we will make some files, these two are what the sample code give us. Let's start with that"
+	echo
+	
+	echo
+	echo "file 1: lim1" 
+	echo -e "There was a young woman named Bright,\nWhose speed was much faster than light." > lim1.txt
+	cat lim1.txt
+	echo
+	echo "_ _ _ _"
+	echo
+	echo "file 2: lim2"
+	echo -e "She set out one day,\nIn a relative way,\nAnd returned on the previous night." >lim2.txt
+	cat lim2.txt
+	echo
+	echo "The rest of the files are too long to write out, so if you fail a test you can see them"
+	echo
+	echo '
+	 ____  __  ____ ____ 
+	(  _ \/ _\/ ___/ ___)
+	 ) __/    \___ \___ \
+        (__) \_/\_(____(____/'>pass__1
+	
+	echo '
+	 ____ __  __ __   
+	(  __/ _\(  (  )  
+	 ) _/    \)(/ (_/\
+	(__)\_/\_(__\____/'>fail__1
+
+	echo -e "According to all known laws of aviation,\nthere is no way a bee should be able to fly.\nIts wings are too small to get its fat little body off the ground.\nThe bee, of course, flies anyway\nbecause bees don't care what humans think is impossible." > file__1
+	
+	echo 
+#test1
+	echo "########################################################"
+	echo
+	echo "This will be comparing your outputs with the correct outputs."
+	echo "If your output matches the correct output, you will see this:"
+	cat pass__1
+	echo
+	echo "If your output does not match, something went wrong. You will see this:"
+	cat fail__1
+	echo
+	echo "along with more specific details"
+	echo
+	echo "########################################################"
+	echo "TEST 1"
+	echo "Input:"
+	echo "./hw5 -c briGHT -c was lim1 lim2"
+
+	./hw5 -c briGHT -c was lim1.txt lim2.txt > yourAnswer
+
+	echo -e "There CENSORED a young woman named Bright,\nWhose speed CENSORED much faster than light.\nShe set out one day,\nIn a relative way,\nAnd returned on the previous night." > answer
+
+if cmp -s answer yourAnswer; then
+	cat pass__1	
+else
+	cat fail__1
+	echo
+	echo "Expected Output:"
+	cat answer
+	echo
+	echo "_ _ _ _"
+	echo
+	echo "Your Output:"
+	./hw5 -c briGHT -c was lim1.txt lim2.txt 
+fi
+	echo
+#test2
+	echo "########################################################"
+	echo 
+	echo "TEST 2"
+	echo "Input:"
+	echo "./hw5 -c bright -r@ -ic was lim1 lim2"
+	./hw5 -c bright -r@ -ic was lim1.txt lim2.txt >yourAnswer
+	
+	echo -e "There @ a young woman named @,\nWhose speed @ much faster than light.\nShe set out one day,\nIn a relative way,\nAnd returned on the previous night." > answer
+
+if cmp -s answer yourAnswer; then
+        cat pass__1
+else
+        cat fail__1
+        echo
+	echo "Expected Output:"
+        cat answer
+	echo
+	echo "_ _ _ _"
+	echo
+        echo "Your Output:"
+        ./hw5 -c bright -r@ -ic was lim1.txt lim2.txt
+fi
+	echo
+#test3
+	echo "########################################################"
+	echo
+	echo "TEST 3"
+	echo "Input:"
+	echo "echo -e \"three . one four one five nine\ntwo six five\" | ./hw5 -vc one"
+
+	echo -e "three . one four one five nine\ntwo six five" | ./hw5 -vc one > yourAnswer
+
+	echo -e "Reading standard input.\nthree . CENSORED four CENSORED five nine\ntwo six five" > answer
+
+if cmp -s answer yourAnswer; then
+	cat pass__1
+else
+	cat fail__1
+	echo
+	echo "Expected Output:"
+	cat answer
+	echo
+	echo "_ _ _ _"
+	echo
+	echo "Your Output:"
+	cat yourAnswer
+fi
+	echo
+#test4-9 will be using file__1
+	echo "########################################################"
+	echo
+	echo "TEST 4"
+	echo "Input:"
+	echo "./hw5 -c aviation file__1"
+	./hw5 -c aviation file__1 > yourAnswer
+	
+	echo -e "According to all known laws of CENSORED,\nthere is no way a bee should be able to fly.\nIts wings are too small to get its fat little body off the ground.\nThe bee, of course, flies anyway\nbecause bees don't care what humans think is impossible." > answer
+
+if cmp -s answer yourAnswer; then
+        cat pass__1
+else
+        cat fail__1
+fi
+	echo
+	echo "########################################################"
+	echo 
+	echo "TEST 5"
+	echo "Input:"
+	echo "./hw5 -cits file__1"
+	./hw5 -cits file__1 > yourAnswer
+	
+	echo -e "According to all known laws of aviation,\nthere is no way a bee should be able to fly.\nIts wings are too small to get CENSORED fat little body off the ground.\nThe bee, of course, flies anyway\nbecause bees don't care what humans think is impossible." > answer
+
+if cmp -s answer yourAnswer; then
+        cat pass__1
+else
+        cat fail__1
+	echo
+	echo "Expected Output:"
+	cat answer
+	echo
+	echo "_ _ _ _"
+	echo
+	echo "Your Output:"
+	cat yourAnswer
+fi
+        echo
+        echo "########################################################"
+	echo
+	echo "TEST 6"
+	echo "Input:"
+	echo "./hw5 -r Bug file__1"
+	./hw5 -r Bug file__1 > yourAnswer
+	cat file__1 > answer
+if cmp -s answer yourAnswer; then
+        cat pass__1
+else
+        cat fail__1
+	echo
+	echo "Expected Output:"
+        cat answer
+        echo
+        echo "_ _ _ _"
+        echo
+        echo "Your Output:"
+        cat yourAnswer
+
+fi
+	echo
+	echo "########################################################"
+	echo
+	echo "TEST 7"
+	echo "Input:"
+	echo "./hw5 -rNoBugs file__1"
+	./hw5 -rNoBugs file__1>yourAnswer
+	cat file__1 > answer
+if cmp -s answer yourAnswer; then
+        cat pass__1
+else
+        cat fail__1
+	echo
+        echo "Expected Output:"
+        cat answer
+        echo
+        echo "_ _ _ _"
+        echo
+        echo "Your Output:"
+        cat yourAnswer
+
+fi
+        echo
+        echo "########################################################"
+	echo 
+	echo "TEST 8"
+	echo "Input:"
+	echo "./hw5 -ir WORD file__1"
+	./hw5 -ir WORD file__1 > yourAnswer
+	cat file__1 > answer
+if cmp -s answer yourAnswer; then
+        cat pass__1
+else
+        cat fail__1
+	echo
+        echo "Expected Output:"
+        cat answer
+        echo
+        echo "_ _ _ _"
+        echo
+        echo "Your Output:"
+        cat yourAnswer
+
+fi
+        echo
+        echo "########################################################"
+        echo
+	echo "TEST 9"
+	echo "Input:"
+	echo "./hw5 -ic BeE file__1"
+	./hw5 -ic BeE file__1 > yourAnswer
+	echo -e "According to all known laws of aviation,\nthere is no way a CENSORED should be able to fly.\nIts wings are too small to get its fat little body off the ground.\nThe CENSORED, of course, flies anyway\nbecause bees don't care what humans think is impossible." > answer
+
+if cmp -s answer yourAnswer; then
+        cat pass__1
+else
+        cat fail__1
+	echo
+        echo "Expected Output:"
+        cat answer
+        echo
+        echo "_ _ _ _"
+        echo
+        echo "Your Output:"
+        cat yourAnswer
+
+fi
+        echo
+        echo "########################################################"
+	echo
+	echo -e "ThiS IS A cAse InDePENDENT FilE\nGoOD LuCK, hoPE yOur -i Is WorKiNg" > file__2
+	
+	echo "TEST 10"
+	echo "Input:"
+	echo "./hw5 -ic this -r REPLACE -c working file__2"
+	./hw5 -ic this -r REPLACE -c working file__2 > yourAnswer
+	echo -e "REPLACE IS A cAse InDePENDENT FilE\nGoOD LuCK, hoPE yOur -i Is REPLACE" > answer
+	
+	
+if cmp -s answer yourAnswer; then
+        cat pass__1
+else
+        cat fail__1
+        echo
+        echo "Expected Output:"
+        cat answer
+        echo
+        echo "_ _ _ _"
+        echo
+        echo "Your Output:"
+        cat yourAnswer
+
+fi
+        echo
+        echo "########################################################"
+	echo
+	echo "TEST 11"
+	echo "Input:"
+	echo "echo -e "three . one four one five nine\ntwo six five" | ./hw5 -vc one"
+	echo -e "three . one four one five nine\ntwo six five" | ./hw5 -vc one > yourAnswer
+	echo -e "Reading standard input.\nthree . CENSORED four CENSORED five nine\ntwo six five" > answer
+
+if cmp -s answer yourAnswer; then
+        cat pass__1
+else
+        cat fail__1
+        echo
+        echo "Expected Output:"
+        cat answer
+        echo
+        echo "_ _ _ _"
+        echo
+        echo "Your Output:"
+        cat yourAnswer
+
+fi
+        echo
+	echo "########################################################"
+        echo
+echo "What the fuck did you just fucking say about me, you little bitch? I’ll have you know I graduated top of my class in the Navy Seals, and I’ve been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills.
+I am trained in gorilla warfare and I’m the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words.
+You think you can get away with saying that shit to me over the Internet? Think again, fucker. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You’re fucking dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that’s just with my bare hands.
+Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little “clever” comment was about to bring down upon you, maybe you would have held your fucking tongue.
+But you couldn’t, you didn’t, and now you’re paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it.
+You’re fucking dead, kiddo.
+" > file__3 
+        echo "TEST 12"
+	echo "Input: (navy seal copypasta)"
+	echo "./hw5 -vic fucking -cshit -c fuck -c fucker -c bitch file__3" 
+	./hw5 -vic fucking -cshit -c fuck -c fucker -c bitch file__3 > yourAnswer
+
+echo "Reading file__3.
+What the CENSORED did you just CENSORED say about me, you little CENSORED? I’ll have you know I graduated top of my class in the Navy Seals, and I’ve been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills.
+I am trained in gorilla warfare and I’m the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the CENSORED out with precision the likes of which has never been seen before on this Earth, mark my CENSORED words.
+You think you can get away with saying that CENSORED to me over the Internet? Think again, CENSORED. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You’re CENSORED dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that’s just with my bare hands.
+Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little CENSORED. If only you could have known what unholy retribution your little “clever” comment was about to bring down upon you, maybe you would have held your CENSORED tongue.
+But you couldn’t, you didn’t, and now you’re paying the price, you goddamn idiot. I will CENSORED fury all over you and you will drown in it.
+You’re CENSORED dead, kiddo.
+" > answer
+
+if cmp -s answer yourAnswer; then
+        cat pass__1
+else
+        cat fail__1
+        echo
+        echo "Expected Output:"
+        cat answer
+        echo
+        echo "_ _ _ _"
+        echo
+        echo "Your Output:"
+        cat yourAnswer
+
+fi
+        echo
+	echo "########################################################"
+	echo
+	echo "SECTION 2: the errors"
+	echo
+	echo "Now that most things should be working, let's see what shouldn't"
+	echo "This next section will test all the errors that should happen"
+	echo
+	echo "There isn't a good way to test this, since error statements have no set syntax,
+make sure it contains the program name and whatever else it may need"
+	echo "I will be putting my error staments as examples of what to look for"
+	echo
+	echo "_  _ _ _ _ _ _ _ _ _ _ _ _ _ _"
+	echo
+	echo "TEST 13"
+	echo "Input: testing for more than one replacement"
+	echo "./hw5 -vic united -c states -r country -rnope"
+	./hw5 -vic united -c states -r country -rnope > yourAnswer
+	
+	cat yourAnswer
+	echo
+	echo "Example error:"
+	echo "ERROR | in program ./hw5 | too many -r arguments"
+	echo
+	echo "########################################################"
+	echo 
+	echo "TEST 14"
+	echo "Input: testing for unreadable file"
+	echo "./hw5 -c unreadable This_is_The_fileName"
+	./hw5 -c unreadable This_is_The_fileName > yourAnswer
+	
+	cat yourAnswer
+	echo
+	echo "Example error:"
+	echo "ERROR | in program: ./hw5 | can't open file: This_is_The_filename"
+	echo
+	echo "########################################################"
+	echo
+	echo "TEST 15"
+	echo "Input: arg for -c is not alphabetic"
+	echo "./hw5 -c 123 file__3"
+	./hw5 -c 123 file__3 > yourAnswer
+	
+	cat yourAnswer
+	echo 
+	echo "Example error:"
+	echo "ERROR | in program: ./hw5 | only words allowed to censor, 123 is not allowed"
+	echo	
+	echo "########################################################"
+	echo
+	echo "TEST 16"
+	echo "Input: repeated censor word"
+	echo "./hw5 -c A -c A lim1"
+	./hw5 -c A -c A lim1.txt > yourAnswer
+	
+	cat yourAnswer
+	echo
+	echo "Example error:"
+	echo "ERROR | in program ./hw5 | no repeating censor words, A is already added"
+	echo
+	echo "if case independence is in effect, then having two arguments differ by case is undefined:"
+	echo "Ex: ./hw5 -c A -i -c a"
+	echo "In other words, do whatever the hell you want in that case"
+	echo
+	echo "########################################################"
+	echo
+	echo "TEST 16"
+	echo "Input: filename before options"
+	echo "./hw5 file__3 -c Fuck"
+	./hw5 file__3 -c Fuck > yourAnswer
+
+	cat yourAnswer
+	echo 
+	echo "Example error:"
+	echo "ERROR | in program: ./hw5 | can't open file: -c"
+	echo 
+	echo "This gives us a can't open file error, since it views -c as a file"
+	echo 
+	echo "########################################################"
+	echo
+	echo "TEST 17"
+	echo "Input: two options right next to each other"
+	echo "./hw5 -i-v file__3"
+	./hw5 -i-v file__3 > yourAnswer
+	
+	cat yourAnswer
+	echo
+	echo "Example error:"
+	echo "ERROR | in program: ./hw5 | make sure there are spaces between arguments"
+	echo  
+	echo "########################################################"
+	echo
+	echo "TEST 18"
+	echo "Input: ending the arguments with a -r or -c"
+	echo "./hw5 -c word -r"
+	./hw5 -c word -r > yourAnswer
+	
+	cat yourAnswer
+	echo
+	echo "Example error:"
+	echo "ERROR | in program: ./hw5 | need argument after -c or -r"
+	echo
+	echo "getopt should also give an error, either work"
+	echo
+	echo "########################################################"
+	echo
+	echo "ok now that we are done, Time to clean up the trash"
+	rm -f pass__1 fail__1 file__1 file__2 file__3 answer yourAnswer
+	echo "Done"
+	echo
+	echo "If anything went wrong or the 'answer' is incorrect, let me know and I will correct it"
+	echo "Good luck with HW5,"
+	echo "xoxo ugly"
+	echo 	

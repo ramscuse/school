@@ -1,0 +1,257 @@
+        -:    0:Source:Date.cc
+        -:    0:Graph:Date.gcno
+        -:    0:Data:Date.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include "Date.h"
+        -:    2:#include <cassert>	// assert
+        -:    3:#include <iomanip>
+        -:    4:#include <time.h>
+        -:    5:
+        -:    6:using namespace std;
+        -:    7:
+        -:    8:// Return true if year is a leap year, false if it isn’t.
+        -:    9://
+        -:   10:// The rules are:
+        -:   11:// • Years divisible by 4 are leap years, except
+        -:   12:// • years divisible by 100 are NOT leap years, except
+        -:   13:// • years divisible by 400 ARE leap years.
+        -:   14://
+        -:   15:// Examples:
+        -:   16:// • Leap years: 1600, 2000, 2004, 2008, 2400
+        -:   17:// • Not leap years: 1700, 1800, 1900, 2001, 2002, 2003
+        -:   18://
+        -:   19:// Ancient Romans used only the divisible-by-4 rule, which gives an
+        -:   20:// average year length of 365.25 days.  This was called the Julian
+        -:   21:// Calendar, after Julius Caesar, who promoted it.
+        -:   22://
+        -:   23:// However, the actual length of the year (365.24217 days) is a bit less
+        -:   24:// than that, so Pope Gregory XIII added the next two rules, creating
+        -:   25:// our current Gregorian Calendar, which is closer (365.2425 days).
+        -:   26:
+   350909:   27:static bool leap(int year) {		// Calculate Gregorian leap year
+  350909*:   28:    assert(1 <= year && year <= 9999);
+   350909:   29:    if (year % 400 == 0)		// Divisible by 400?
+      941:   30:	return true;			// It’s a leap year.
+   349968:   31:    if (year % 100 == 0)		// Divisible by 100?
+     2664:   32:	return false;			// Not a leap year.
+   347304:   33:    if (year % 4 == 0)			// Divisible by 4?
+    83206:   34:	return true;			// It’s a leap year.
+   264098:   35:    return false;			// Boring plain non-leap year.
+        -:   36:}
+        -:   37:
+   345221:   38:static int days_per_year(int year) {
+  345221*:   39:    assert(1 <= year && year <= 9999);
+   345221:   40:    return leap(year) ? 366 : 365;
+        -:   41:}
+        -:   42:
+    38295:   43:static int days_per_month(int year, int month) {
+   38295*:   44:    assert(1 <= year && year <= 9999);
+   38295*:   45:    assert(1 <= month && month <= 12);
+    38295:   46:    const int days[] = {00,31,28,31,30,31,30,31,31,30,31,30,31};
+    38295:   47:    if (month==2 && leap(year))
+      437:   48:	return 29;
+    37858:   49:    return days[month];
+        -:   50:}
+        -:   51:
+       59:   52:int Date::ymd_to_daynum(int year, int month, int day) {
+      59*:   53:    assert(1 <= year && year <= 9999);
+      59*:   54:    assert(1 <= month && month <= 12);
+      59*:   55:    assert(1 <= day && day <= 31);
+        -:   56:
+        -:   57:    // Start at Jan 1, 0001, and increment until we get to what we want
+       59:   58:    int daynum=1;
+        -:   59:
+    69814:   60:    for (int y=1; y < year; y++)
+    69755:   61:	daynum += days_per_year(y);
+        -:   62:
+      389:   63:    for (int m=1; m < month; m++)
+      330:   64:	daynum += days_per_month(year, m);
+        -:   65:
+        -:   66:    // We're now poised at the first day of that month
+       59:   67:    daynum += day-1;
+        -:   68:
+      59*:   69:    assert(1 <= daynum && daynum <= 10000 * 366);
+       59:   70:    return daynum;
+        -:   71:}
+        -:   72:
+      210:   73:static void daynum_to_ymd(int daynum, int &year, int &month, int &day) {
+     210*:   74:    assert(1 <= daynum && daynum <= 10000 * 366);
+        -:   75:
+      210:   76:    int y=1, m=1, d=1;
+        -:   77:
+        -:   78:#if 1
+        -:   79:    // Jump forward by years, at first.
+        -:   80:    // Why 400 instead of 365 or 366?  Too much caution, I suppose.
+   275676:   81:    while (daynum >= 400)
+   275466:   82:	daynum -= days_per_year(y++);
+        -:   83:#endif
+        -:   84:
+    38175:   85:    for (; daynum>1; daynum--) {
+        -:   86:	// Increment y-m-d
+    37965:   87:	d++;
+    37965:   88:	if (d > days_per_month(y, m)) {
+     1156:   89:	    m++;
+     1156:   90:	    d=1;
+     1156:   91:	    if (m > 12) {
+        9:   92:		y++;
+        9:   93:		m=1;
+        -:   94:	    }
+        -:   95:	}
+        -:   96:    }
+        -:   97:
+      210:   98:    year = y;
+      210:   99:    month = m;
+      210:  100:    day = d;
+        -:  101:
+     210*:  102:    assert(1 <= year && year <= 9999);
+     210*:  103:    assert(1 <= month && month <= 12);
+     210*:  104:    assert(1 <= day && day <= 31);
+      210:  105:}
+        -:  106:
+       54:  107:Date::Date(int year, int month, int day)
+       54:  108:: daynum(ymd_to_daynum(year, month, day)) {
+      54*:  109:    assert(1 <= year && year <= 9999);
+      54*:  110:    assert(1 <= month && month <= 12);
+      54*:  111:    assert(1 <= day && day <= 31);
+      54*:  112:    assert(1 <= daynum && daynum <= 10000 * 366);
+       54:  113:}
+        -:  114:
+        2:  115:Date::Date() {
+        2:  116:    const time_t now = time(nullptr);	    // Seconds since 1970 started
+        2:  117:    struct tm *tm = localtime(&now);	    // year/month/day/hour/min/sec
+        2:  118:    daynum = ymd_to_daynum(tm->tm_year+1900, tm->tm_mon+1, tm->tm_mday);
+        -:  119:    // Yes, 1900.  That’s not a Y2K bug--that’s how localtime is defined.
+        2:  120:}
+        -:  121:
+       69:  122:int Date::getday() const {
+        -:  123:    int year, month, day;
+       69:  124:    daynum_to_ymd(daynum, year, month, day);
+       69:  125:    return day;
+        -:  126:}
+        -:  127:
+       69:  128:int Date::getmonth() const {
+        -:  129:    int year, month, day;
+       69:  130:    daynum_to_ymd(daynum, year, month, day);
+       69:  131:    return month;
+        -:  132:}
+        -:  133:
+       69:  134:int Date::getyear() const {
+        -:  135:    int year, month, day;
+       69:  136:    daynum_to_ymd(daynum, year, month, day);
+       69:  137:    return year;
+        -:  138:}
+        -:  139:
+        1:  140:void Date::setday(int new_day) {
+        -:  141:    int year, month, day;
+        1:  142:    daynum_to_ymd(daynum, year, month, day);
+        1:  143:    daynum = ymd_to_daynum(year, month, new_day);
+        1:  144:}
+        -:  145:
+        1:  146:void Date::setmonth(int new_month) {
+        -:  147:    int year, month, day;
+        1:  148:    daynum_to_ymd(daynum, year, month, day);
+        1:  149:    daynum = ymd_to_daynum(year, new_month, day);
+        1:  150:}
+        -:  151:
+        1:  152:void Date::setyear(int new_year) {
+        -:  153:    int year, month, day;
+        1:  154:    daynum_to_ymd(daynum, year, month, day);
+        1:  155:    daynum = ymd_to_daynum(new_year, month, day);
+        1:  156:}
+        -:  157:
+        -:  158:// This one stands alone
+        -:  159:
+        2:  160:int Date::operator-(const Date &rhs) const {
+        2:  161:    return daynum - rhs.daynum;
+        -:  162:}
+        -:  163:
+        -:  164:// This does the real work of all numeric operations.
+        -:  165:// All other operators (+, -, ++, -=, etc) should invoke operator+=.
+        -:  166:
+       10:  167:Date &Date::operator+=(int value) {
+       10:  168:    daynum += value;
+       10:  169:    return *this;
+        -:  170:}
+        -:  171:
+        3:  172:Date Date::operator+(int value) const {
+        3:  173:    Date result = *this;
+        3:  174:    return result += value;
+        -:  175:}
+        -:  176:
+        1:  177:const Date &Date::operator++() {			// prefix
+        1:  178:    *this += 1;
+        1:  179:    return *this;
+        -:  180:}
+        -:  181:
+        1:  182:Date Date::operator++(int /* dummy */) {		// postfix
+        1:  183:    const auto before = *this;
+        1:  184:    *this += 1;
+        1:  185:    return before;
+        -:  186:}
+        -:  187:
+        1:  188:Date Date::operator-(int value) const {
+        1:  189:    return *this + -value;
+        -:  190:}
+        -:  191:
+        4:  192:Date &Date::operator-=(int value) {
+        4:  193:    return *this += -value;
+        -:  194:}
+        -:  195:
+        1:  196:const Date &Date::operator--() {			// prefix
+        1:  197:    *this -= 1;
+        1:  198:    return *this;
+        -:  199:}
+        -:  200:
+        1:  201:Date Date::operator--(int /* dummy */) {		// postfix
+        1:  202:    Date before = *this;
+        1:  203:    *this -= 1;
+        1:  204:    return before;
+        -:  205:}
+        -:  206:
+        -:  207:
+        2:  208:bool Date::operator<(const Date &rhs) const {
+        2:  209:    return daynum < rhs.daynum;
+        -:  210:}
+        -:  211:
+        3:  212:bool Date::operator<=(const Date &rhs) const {
+        3:  213:    return daynum <= rhs.daynum;
+        -:  214:}
+        -:  215:
+        2:  216:bool Date::operator>(const Date &rhs) const {
+        2:  217:    return daynum > rhs.daynum;
+        -:  218:}
+        -:  219:
+        3:  220:bool Date::operator>=(const Date &rhs) const {
+        3:  221:    return daynum >= rhs.daynum;
+        -:  222:}
+        -:  223:
+        2:  224:bool Date::operator==(const Date &rhs) const {
+        2:  225:    return daynum == rhs.daynum;
+        -:  226:}
+        -:  227:
+        2:  228:bool Date::operator!=(const Date &rhs) const {
+        2:  229:    return daynum != rhs.daynum;
+        -:  230:}
+        -:  231:
+        -:  232:// non-methods (free functions):
+        -:  233:
+        1:  234:Date operator+(int value, const Date &rhs) {
+        1:  235:    return rhs + value;
+        -:  236:}
+        -:  237:
+       69:  238:ostream& operator<<(ostream &out, const Date &d) {
+       69:  239:    return out << d.getyear() << '-' << d.getmonth() << '-' << d.getday();
+        -:  240:}
+        -:  241:
+       55:  242:istream& operator>>(istream &in, Date &d) {
+        -:  243:    int year, month, day;
+        -:  244:    char c1, c2;
+      108:  245:    if (in >> year  >> c1 && c1=='-'
+       52:  246:     && in >> month >> c2 && c2=='-'
+      108:  247:     && in >> day)
+       52:  248:	d = Date(year, month, day);
+        -:  249:    else
+        3:  250:	in.setstate(ios::failbit);	// Input failed, so spoil the stream
+       55:  251:    return in;
+        -:  252:}

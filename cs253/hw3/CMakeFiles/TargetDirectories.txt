@@ -1,0 +1,4 @@
+/s/parsons/g/under/ramscuse/cs253/hw3/CMakeFiles/edit_cache.dir
+/s/parsons/g/under/ramscuse/cs253/hw3/CMakeFiles/rebuild_cache.dir
+/s/parsons/g/under/ramscuse/cs253/hw3/CMakeFiles/hw3.dir
+/s/parsons/g/under/ramscuse/cs253/hw3/CMakeFiles/hw3.tar.dir

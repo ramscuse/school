@@ -1,0 +1,10 @@
+exp1: delete() not called
+exp2: Invalid allocation of memory, delete() not called
+exp3: Using uninitialised values that don't exist
+exp4: Using uninitialised values that don't exist in call to foo
+exp5: Trying to write to a location in memory that has not been malloc'd
+exp6: Trying to call a part of memory that was deleted/free'd
+exp7: Using delete instead of delete []
+exp8: Using free instead of delete []
+exp9: Deleting a part of memory that has not been malloc'd becuase the pointer moved
+exp10: Valgrind didn't complaion because it is undefined behavior and endl is technically okay

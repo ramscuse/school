@@ -1,0 +1,849 @@
+#! /bin/bash
+clear
+
+echo  "                                         
+ _____ _ _ _ ___                         
+|  |  | | | |_  |                        
+|     | | | | | |                        
+|__|__|_____| |_|                                                                 
+ _____         _   _____                 
+| __  |___ ___| |_| __  |___ ___ ___ ___ 
+| __ -| .'|_ -|   |    -| .'|   | . | -_|
+|_____|__,|___|_|_|__|__|__,|_|_|_  |___|
+                                |___|    
+"
+echo "                             made by ugly"
+echo "________________________________________________________________"
+	echo
+	echo "This bash will be using different .cc files to test the code"
+	echo "First things first, let's make those files"
+	echo 
+	echo "we have to remove the files so we don't have any overwrite"
+	echo "Are you ok with removing a directory that we created?"
+	echo "This is on the offchance you somehow chose to use BashRange_Files as a director"
+	echo
+	echo "If you are currently using that as a directory, and don't want to lose it, then say N, otherwise just say Y"
+	echo
+	echo "So, would you like to continue? [Y/N]"
+
+	read input
+if [[ $input == "Y" || $input == "y" ]]; then
+	echo
+	echo "Ok deleting these files, they are just to hold info you won't see, so no need to worry"
+	rm -rf BashRange_Files
+else 
+	echo
+	echo "Ok we will not touch those files. If you want to use this bash, make a copy of those files and rerun the bash"
+	exit 1
+fi
+	echo
+	echo "- - - - - - - - - - - - - - - - - - - - - - -"
+	echo
+	echo "This Bash script will use inputs via a test.cc file, then run your code with said file"
+	echo "each section of testing will pass or fail, it will show you using diff how your output differs from the correct output. You can ignore the numbers that tell you where the error happened, just look at the comparison. It will make more sense when you do the first test."
+	echo "Instead of giving you 100000 lines of junk, we are going to go step by step"
+
+	echo "- - - - - - - - - - - - - - - - - - - - - - -"
+	echo 
+	mkdir BashRange_Files
+	echo "are you using a .cc file or just a .h file? Y for both a .cc file and .h file, N for just a .h"
+	echo "[Y/N]"
+
+	read input2
+if [[ $input2 == "Y" || $input2 == "y" ]]; then
+	cp Range.cc Range.h BashRange_Files
+else
+	cp Range.h BashRange_Files
+fi
+	cd BashRange_Files
+	ls
+##################################################################################
+	echo "
+cmake_minimum_required(VERSION 3.11)
+project(hw7)
+
+# Are we in the wrong directory?
+if (CMAKE_SOURCE_DIR MATCHES \"[Hh][Ww]([0-9])$\"
+   AND NOT PROJECT_NAME MATCHES \"${CMAKE_MATCH_1}$\")
+    message(FATAL_ERROR \"Building ${PROJECT_NAME} in ${CMAKE_SOURCE_DIR}\")
+endif()
+
+# Using -Wall is required:
+add_compile_options(-Wall)
+
+# These compile flags are highly recommended, but not required:
+add_compile_options(-Wextra -Wpedantic)
+
+# Optional super-strict mode:
+add_compile_options(-fmessage-length=80 -fno-diagnostics-show-option
+    -fstack-protector-all -g -O3 -std=c++17 -Walloc-zero -Walloca
+    -Wctor-dtor-privacy -Wduplicated-cond -Wduplicated-branches -Werror
+    -Wextra-semi -Wfatal-errors -Winit-self -Wlogical-op -Wold-style-cast
+    -Wshadow -Wunused-const-variable=1 -Wzero-as-null-pointer-constant)
+
+# add_compile_options must be BEFORE add_executable.
+
+add_executable(test test.cc)
+
+# Create a tar file every time:
+add_custom_target(${PROJECT_NAME}.tar ALL COMMAND
+    tar -cf ${PROJECT_NAME}.tar *.cc *.h CMakeLists.txt)
+" > CMakeLists.txt
+echo '
+         ____  __  ____ ____
+        (  _ \/ _\/ ___/ ___)
+         ) __/    \___ \___ \
+        (__) \_/\_(____(____/'>pass__1
+
+        echo '
+         ____ __  __ __
+        (  __/ _\(  (  )
+         ) _/    \)(/ (_/\
+        (__)\_/\_(__\____/'>fail__1
+
+
+##################################################################################
+	echo "
+#include \"Range.h\"
+#include <cassert>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+	Range<int> a(4,20), b(500,900), zero(0);
+	Range<long long> j(5,7), k(-3,2);
+	auto result = a;
+	result += b;
+	cout << a << \" += \" << b << \" = \" << result << \"\n\"; 
+	auto result1 = a;
+	result += zero;
+	cout << a << \" += \" << zero << \" = \" << result1 << \"\n\";
+	auto result2 = j;
+	result2 += k;
+	cout << j << \" += \" << k << \" = \" << result2 << \"\n\";
+	auto result3 = zero;
+	result += zero;
+	cout << zero << \" += \" << zero << \" = \" << result3 << \"\n\";
+	Range <long double> lon1(-15.572, -4.32675), lon2(57.4623, 58);
+	auto result4 = lon1;
+	result4 += lon2;
+	cout << lon1 << \" += \" << lon2 << \" = \" << result4 << \"\n\";
+	return 0;
+}
+
+" > test.cc
+	
+	cmake . && make
+	echo "__________________________________________________________"
+	echo
+	echo "TEST #1"
+	echo "TESTING: +="
+	echo 
+	echo "__________________________________________________________"
+	echo
+	./test > file1
+	echo -e "[4,20] += [500,900] = [504,920]\n[4,20] += [0,0] = [4,20]\n[5,7] += [-3,2] = [2,9]\n[0,0] += [0,0] = [0,0]\n[-15.572000,-4.326750] += [57.462300,58.000000] = [41.890300,53.673250]" > file2
+	echo
+if cmp file1 file2;then
+	cat pass__1
+	echo
+else
+	echo "Your output on the Left, correct on the Right"
+        echo "it will show errors by using this | next to the error line, if you don't see any of those in front of the lines on the right, then you are good to go"
+	cat fail__1
+	echo
+	diff -y -W 120 file1 file2
+fi
+	echo
+	echo "continue? Doing so will wipe the slate clean [Y/N]"
+
+	read cont1
+if [[ $cont1 == "Y" || $cont1 == "y" ]]; then	
+	clear
+else
+	cd ..
+        rm -r BashRange_Files
+	exit 1
+fi
+###################################################################################
+	        echo "
+#include \"Range.h\"
+#include <cassert>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+        Range<int> a(4,20), b(500,900), zero(0);
+        Range<long long> j(5,7), k(-3,2);
+        auto result = a + b;
+        cout << a << \" + \" << b << \" = \" << result << \"\n\";
+        auto result1 = a + zero;
+        cout << a << \" + \" << zero << \" = \" << result1 << \"\n\";
+        auto result2 = j + k;
+        cout << j << \" + \" << k << \" = \" << result2 << \"\n\";
+        auto result3 = zero + zero;
+        cout << zero << \" + \" << zero << \" = \" << result3 << \"\n\";
+        Range <long double> lon1(-15.572, -4.32675), lon2(57.4623, 58);
+        auto result4 = lon1 + lon2;
+        cout << lon1 << \" + \" << lon2 << \" = \" << result4 << \"\n\";
+        return 0;
+}
+
+
+" > test.cc
+
+	echo -e "[4,20] + [500,900] = [504,920]\n[4,20] + [0,0] = [4,20]\n[5,7] + [-3,2] = [2,9]\n[0,0] + [0,0] = [0,0]\n[-15.572000,-4.326750] + [57.462300,58.000000] = [41.890300,53.673250]" > file2
+	cmake . && make
+	echo "__________________________________________________________"
+	echo
+	echo "TEST #2"
+	echo "TESTING: +"
+	echo
+	echo "__________________________________________________________"
+	echo
+	./test > file1
+
+if cmp file1 file2;then
+	cat pass__1
+	echo
+else
+	cat fail__1
+	echo
+	diff -y -W 120 file1 file2
+	echo
+fi
+	echo "continue? [Y/N]"
+	read cont2
+if [[ $cont2 == "Y" || $cont2 == "y" ]]; then
+	clear
+else
+	cd ..
+        rm -r BashRange_Files
+	exit 1
+fi
+###################################################################################
+echo "
+#include \"Range.h\"
+#include <cassert>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+        Range<int> a(4,20), b(500,900), zero(0);
+        Range<long long> j(5,7), k(-3,2);
+        auto result = a;
+	result -= b;
+        cout << a << \" -= \" << b << \" = \" << result << \"\n\";
+        auto result1 = a;
+	result1 -= zero;
+        cout << a << \" -= \" << zero << \" = \" << result1 << \"\n\";
+        auto result2 = j;
+	result2 -= k;
+        cout << j << \" -= \" << k << \" = \" << result2 << \"\n\";
+        auto result3 = zero;
+	result3 -= zero;
+        cout << zero << \" -= \" << zero << \" = \" << result3 << \"\n\";
+        Range <long double> lon1(-15.572, -4.32675), lon2(57.4623, 58);
+        auto result4 = lon1;
+	result4 -= lon2;
+        cout << lon1 << \" -= \" << lon2 << \" = \" << result4 << \"\n\";
+        return 0;
+}
+
+
+" > test.cc
+
+        echo -e "[4,20] -= [500,900] = [-896,-480]\n[4,20] -= [0,0] = [4,20]\n[5,7] -= [-3,2] = [3,10]\n[0,0] -= [0,0] = [0,0]\n[-15.572000,-4.326750] -= [57.462300,58.000000] = [-73.572000,-61.789050]" > file2
+	cmake . && make
+	echo "__________________________________________________________"
+	echo
+	echo "TEST #3"
+	echo "TESTING: -="
+	echo
+	echo "__________________________________________________________"
+	echo
+	./test > file1
+
+if cmp file1 file2;then
+	cat pass__1
+	echo
+else
+	cat fail__1
+	echo
+	diff -y -W 120 file1 file2
+	echo
+fi
+	echo "continue? [Y/N]"
+	read cont3
+if [[ $cont3 == "Y" || $cont3 == "y" ]]; then
+	clear
+else
+	cd ..
+        rm -r BashRange_Files
+	exit 1
+fi
+###################################################################################
+echo "
+#include \"Range.h\"
+#include <cassert>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+        Range<int> a(4,20), b(500,900), zero(0);
+        Range<long long> j(5,7), k(-3,2);
+        auto result = a - b;
+        cout << a << \" - \" << b << \" = \" << result << \"\n\";
+        auto result1 = a - zero;
+        cout << a << \" - \" << zero << \" = \" << result1 << \"\n\";
+        auto result2 = j - k;
+        cout << j << \" - \" << k << \" = \" << result2 << \"\n\";
+        auto result3 = zero - zero;
+        cout << zero << \" - \" << zero << \" = \" << result3 << \"\n\";
+        Range <long double> lon1(-15.572, -4.32675), lon2(57.4623, 58);
+        auto result4 = lon1 - lon2;
+        cout << lon1 << \" - \" << lon2 << \" = \" << result4 << \"\n\";
+        return 0;
+}
+" > test.cc
+	echo -e "[4,20] - [500,900] = [-896,-480]\n[4,20] - [0,0] = [4,20]\n[5,7] - [-3,2] = [3,10]\n[0,0] - [0,0] = [0,0]\n[-15.572000,-4.326750] - [57.462300,58.000000] = [-73.572000,-61.789050]" > file2
+	cmake . && make
+	echo "__________________________________________________________"
+	echo
+	echo "TEST #4"
+	echo "TESTING: -"
+	echo
+	echo "__________________________________________________________"
+	echo
+	./test > file1
+
+if cmp file1 file2;then
+        cat pass__1
+        echo
+else
+        cat fail__1
+        echo
+        diff -y -W 120 file1 file2
+        echo
+fi
+        echo "continue? [Y/N]"
+        read cont4
+if [[ $cont4 == "Y" || $cont4 == "y" ]]; then
+        clear
+else
+        cd ..
+        rm -r BashRange_Files
+	exit 1
+fi
+
+###################################################################################
+echo "
+#include \"Range.h\"
+#include <cassert>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+        Range<int> a(4,20), b(500,900), zero(0);
+        Range<long long> j(5,7), k(-3,2);
+        auto result = a;
+	result *= b;
+        cout << a << \" *= \" << b << \" = \" << result << \"\n\";
+        auto result1 = a;
+	result1 *= zero;
+        cout << a << \" *= \" << zero << \" = \" << result1 << \"\n\";
+        auto result2 = j;
+	result2 *= k;
+        cout << j << \" *= \" << k << \" = \" << result2 << \"\n\";
+        auto result3 = zero;
+	result3 *= zero;
+        cout << zero << \" *= \" << zero << \" = \" << result3 << \"\n\";
+        Range <long double> lon1(-15.572, -4.32675), lon2(57.4623, 58);
+        auto result4 = lon1;
+	result4 *= lon2;
+        cout << lon1 << \" *= \" << lon2 << \" = \" << result4 << \"\n\";
+        return 0;
+}
+" > test.cc
+	
+	echo -e "[4,20] *= [500,900] = [2000,18000]\n[4,20] *= [0,0] = [0,0]\n[5,7] *= [-3,2] = [-21,14]\n[0,0] *= [0,0] = [0,0]\n[-15.572000,-4.326750] *= [57.462300,58.000000] = [-903.176000,-248.625007]" > file2
+	cmake . && make
+	echo "__________________________________________________________"
+	echo
+	echo "TEST #5"
+	echo "TESTING: *="
+	echo
+	echo "__________________________________________________________"
+	echo
+	./test > file1
+if cmp file1 file2;then
+	cat pass__1
+	echo
+else
+	cat fail__1
+	echo
+	diff -y -W 120 file1 file2
+	echo
+fi
+	echo "continue? [Y/N]"
+        read cont5
+if [[ $cont5 == "Y" || $cont5 == "y" ]]; then
+        clear
+else
+        cd ..
+        rm -r BashRange_Files
+	exit 1
+fi
+
+###################################################################################
+	rm -rf file1 file2
+echo "
+#include \"Range.h\"
+#include <cassert>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+        Range<int> a(4,20), b(500,900), zero(0);
+        Range<long long> j(5,7), k(-3,2);
+        auto result = a * b;
+        cout << a << \" * \" << b << \" = \" << result << \"\n\";
+        auto result1 = a * zero;
+        cout << a << \" * \" << zero << \" = \" << result1 << \"\n\";
+        auto result2 = j * k;
+        cout << j << \" * \" << k << \" = \" << result2 << \"\n\";
+        auto result3 = zero * zero;
+        cout << zero << \" * \" << zero << \" = \" << result3 << \"\n\";
+        Range <long double> lon1(-15.572, -4.32675), lon2(57.4623, 58);
+        auto result4 = lon1 * lon2;
+        cout << lon1 << \" * \" << lon2 << \" = \" << result4 << \"\n\";
+        return 0;
+}" > test.cc
+
+	echo -e "[4,20] * [500,900] = [2000,18000]\n[4,20] * [0,0] = [0,0]\n[5,7] * [-3,2] = [-21,14]\n[0,0] * [0,0] = [0,0]\n[-15.572000,-4.326750] * [57.462300,58.000000] = [-903.176000,-248.625007]" > file2
+	cmake . && make
+	echo "__________________________________________________________"
+	echo
+        echo "TEST #6"
+        echo "TESTING: *"
+        echo
+	echo "__________________________________________________________"
+	echo
+	./test > file1
+if cmp file1 file2;then
+        cat pass__1
+        echo
+else
+        cat fail__1
+        echo
+        diff -y -W 120 file1 file2
+        echo
+fi
+        echo "continue? [Y/N]"
+        read cont6
+if [[ $cont6 == "Y" || $cont6 == "y" ]]; then
+        clear
+else
+	cd ..
+        rm -r BashRange_Files
+	exit 1
+fi
+
+###################################################################################
+echo "
+#include \"Range.h\"
+#include <cassert>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+        Range <double> a(1.25, 3.75), b(15);
+	Range <long double> c(2.5, 8.5);
+	const long double d = -.5;
+
+	auto result1 = a;
+	result1 /= b;
+	cout << a << \" /= \" << b << \" = \" << result1 << \"\n\";
+	auto result2 = b;
+	result2 /= a;
+	cout << b << \" /= \" << a << \" = \" << result2 << \"\n\";
+	auto result3 = c;
+	result3 /= d;
+	cout << c << \" /= \" << d << \" = \" << result3 << \"\n\";
+        return 0;
+}" > test.cc
+
+	echo -e "[1.25,3.75]" >file2
+	cmake . && make	
+	echo "__________________________________________________________"
+	echo
+        echo "TEST #7"
+        echo "TESTING: /="
+	echo "Had to change this one up a bit, due to integer division affecting results"
+        echo "I got lazy at this point and I am not sure how the precision should affect the results, so I am just going to spit your result out and give you roughly what to look for"
+	echo
+	echo "__________________________________________________________"
+	echo
+	./test > file1
+	echo "Your output:"
+	cat file1
+	echo -e "[1.250000,3.750000] /= [15.000000,15.000000] = [0.083333,0.250000]\n[15.000000,15.000000] /= [1.250000,3.750000] = [4.000000,12.000000]\n[2.500000,8.500000] /= -0.500000 = [-17.000000,-5.000000]" > file2
+	echo 
+	echo "Should look like this?"
+	cat file2
+#if cmp file1 file2;then
+#	cat pass__1
+#	echo
+#else
+#	cat fail__1
+#	echo
+#	diff -y -W 120 file1 file2
+#	echo
+#fi
+	echo
+	echo "continue? [Y/N]"
+	read cont7
+if [[ $cont7 == "Y" || $cont7 == "y" ]];then
+	clear
+else
+	cd ..
+	rm -r BashRange_Files
+	exit 1
+fi
+
+###################################################################################
+echo "
+#include \"Range.h\"
+#include <cassert>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+        Range <double> a(1.25, 3.75), b(15);
+        Range <long double> c(2.5, 8.5);
+        const long double d = -.5;
+
+        auto result1 = a / b;
+        cout << a << \" / \" << b << \" = \" << result1 << \"\n\";
+        auto result2 = b / a;
+        cout << b << \" / \" << a << \" = \" << result2 << \"\n\";
+        auto result3 = c / d;
+        cout << c << \" / \" << d << \" = \" << result3 << \"\n\";
+        return 0;
+}
+" > test.cc
+	cmake . && make
+	echo "__________________________________________________________"
+	echo
+        echo "TEST #8"
+        echo "TESTING: /"
+        echo
+	echo "__________________________________________________________"
+	echo
+	./test > file1
+	cp file1 ..
+	echo "Your output:"
+	cat file1
+	echo -e "[1.250000,3.750000] / [15.000000,15.000000] = [0.083333,0.250000]\n[15.000000,15.000000] / [1.250000,3.750000] = [4.000000,12.000000]\n[2.500000,8.500000] / -0.500000 = [-17.000000,-5.000000]" > file2
+	echo
+	echo "Something look like this? I don't know, I am not a doctor"
+	cat file2
+	echo
+        echo "continue? [Y/N]"
+        read cont8
+if [[ $cont8 == "Y" || $cont8 == "y" ]];then
+        clear
+else
+        cd ..
+        rm -r BashRange_Files
+        exit 1
+fi
+
+###################################################################################
+echo "
+#include \"Range.h\"
+#include <cassert>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+	Range<int> a(4,20), af(4,20);
+	Range<unsigned short> g(80,90), gf(80,90);
+	stringstream s1(\"       [12, 34]       \");
+	s1 >> a;
+	cout <<\"Before: \" << af << \", After: \" <<  a << \"\n\";
+	stringstream s2(\" \t \t [ 75   \n     ,  \n    80 ] after \");
+	string after;
+	s2 >> g >> after;
+	cout << \"Before: \" << gf << \", After: \" << g << \", String: \" << after << \"\n\";
+}
+" > test.cc
+	cmake . && make	
+	echo "__________________________________________________________"
+	echo
+        echo "TEST #9"
+        echo "TESTING: >>"
+        echo
+	echo "__________________________________________________________"
+	echo
+	./test > file1
+	echo
+	echo -e "Before: [4,20], After: [12,34]\nBefore: [80,90], After: [75,80], String: after" > file2
+
+if cmp file1 file2;then
+       cat pass__1
+       echo
+else
+       cat fail__1
+       echo
+       diff -y -W 120 file1 file2
+       echo
+fi
+
+	echo
+	echo "Continue? [Y/N]"
+        read cont9
+if [[ $cont9 == "Y" || $cont9 == "y" ]];then
+        clear
+else
+        cd ..
+        rm -r BashRange_Files
+        exit 1
+fi
+
+###################################################################################
+echo "
+#include \"Range.h\"
+#include <cassert>
+#include <iostream>
+#include <sstream>
+ 
+using namespace std;
+ 
+int main() {
+	Range<long double> o(-4.125, -1.25);
+	Range<int> containZero(-15,15), notContainZero(15,20);
+	bool caught = false;
+	try {
+		o.assign(5.00L, 4.999L);
+	}
+	catch (const runtime_error &re) {
+		cout << \"Tried to assign out order: \" << re.what() << \"\n\";
+		caught = true;
+	}
+	assert(caught);
+
+	caught = false;
+	try {
+		notContainZero /= containZero;	
+        }
+        catch (const runtime_error &re) {
+		cout << \"Tried to divide by zero: \" << re.what() << \"\n\";
+		caught = true;
+        }
+	assert(caught);
+
+	caught = false;
+        try {
+		auto result = notContainZero / containZero;
+		cout << result;
+        }
+        catch (const runtime_error &re) {
+		cout << \"Tried to divide by zero, again: \" << re.what() << \"\n\";
+                caught = true;
+        }
+	assert(caught);
+
+	caught = false;
+        try {
+                Range<int> bad(15,-15);
+		cout << bad;
+        }
+        catch (const runtime_error &re) {
+                cout << \"Tried to initialize out of order: \" << re.what() << \"\n\";
+                caught = true;
+        }
+	assert(caught);
+
+}" > test.cc
+	cmake . && make	
+	echo "__________________________________________________________"
+	echo
+        echo "TEST #10"
+        echo "TESTING: ERRORS"
+        echo "This one will have no real \"answer\", just error statements"
+	echo "if you didn't get an error, then check that out"
+	echo 
+	echo "__________________________________________________________"
+	echo
+	./test > file1
+	echo
+	cat file1
+	echo
+	echo "Continue? [Y/N]"
+        read cont10
+if [[ $cont10 == "Y" || $cont10 == "y" ]];then
+        clear
+else
+        cd ..
+        rm -r BashRange_Files
+        exit 1
+fi
+
+
+#fi
+###################################################################################
+echo "
+#include \"Range.h\"
+#include <cassert>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+	const Range<int> someVal(-15,15), same(-15,15), notSame(-16,15), notSame2(-15);
+	assert(someVal == same);
+	assert(someVal != notSame);
+	assert(someVal != notSame2);
+	
+	Range<long double> value(2.5,2.5), zeros(2.5000, 2.500);
+	long double sameValue = 2.5;
+	assert(value == sameValue); 
+	assert(value == zeros);
+
+}
+" > test.cc
+	cmake . && make
+	echo "__________________________________________________________"	
+	echo
+        echo "TEST #11"
+        echo "TESTING: bool"
+        echo "You will probably get errors, this is testing how const affects results"
+	echo "I used two methods for == and two methods for !="
+	echo "one set of == and != is in the class Range, they deal with const values and non cosnt"
+	echo "Then the other set are outside the class Range, they deal with both const"
+	echo
+	echo "__________________________________________________________"
+	echo
+	./test > file1
+	if [ -s file1 ]; then
+	cat fail__1
+	cat file1
+else
+	cat pass__1
+	echo
+fi
+	
+	echo "Continue? [Y/N]"
+        read cont10
+if [[ $cont10 == "Y" || $cont10 == "y" ]];then
+        clear
+else
+        cd ..
+        rm -r BashRange_Files
+        exit 1
+fi
+
+
+###################################################################################
+echo "
+#include \"Range.h\"
+#include <cassert>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+	const Range<int> con1(5), con2(-15,5), con3(5,5);
+	Range<int> noCon1(5), noCon2(-15,5), noCon3(5,5);
+	
+	auto result1 = con1 + con2;
+	cout << \"Const: \" << con1  << \" + \" << con2 << \" = \" << result1 << \"\n\";
+	auto result2 = noCon1 + noCon2;
+	cout <<\"Not Const: \" << noCon1  << \" + \" << noCon2 << \" = \" << result2 << \"\n\";
+	assert(result1 == result2);
+	auto result3 = con1;
+	result3 += noCon2;
+	cout <<\"Mix Const: \" << con1  << \" += \" << noCon2 << \" = \" << result3 << \"\n\";
+	assert(result3 == result2);
+	auto result4 = noCon1 - con3;
+	cout << \"Mix Const: \" << noCon1  << \" - \" << con3 << \" = \" << result4 << \"\n\";
+	
+	const Range<unsigned short> a(5,7), b(10,20);
+	Range<unsigned short> c(5); 
+	const long double ld = 5;
+	Range<long double> ld1(2);
+	auto result5 = a / b;
+	cout <<\"Const: \" << a  << \" / \" << b << \" = \" << result5 << \"\n\";
+	auto result6 = c;
+	result6 /= b;
+	cout <<\"Mix Const: \" << c  << \" /= \" << b << \" = \" << result6 << \"\n\";
+	auto result7 = b;
+        result7 /= c;
+        cout <<\"Mix Const: \" << b  << \" /= \" << c << \" = \" << result7 << \"\n\";
+	auto result8 = ld1 * ld;
+	cout <<\"Mix Const: \" << ld1  << \" * \" << ld << \" = \" << result8 << \"\n\";
+	
+
+
+}" > test.cc
+	cmake . && make
+	echo "__________________________________________________________"	
+	echo
+        echo "TEST #12"
+        echo "TESTING: const stuff"
+        echo "Lets see if your code can handle const stuff"
+	echo
+	echo "__________________________________________________________"
+	echo 
+	./test > file1
+	cat file1
+	echo
+###################################################################################
+	echo "########################################################"
+	echo
+	echo "DONE!"
+	echo
+	echo
+	echo "ok that should be it then"
+	echo "________________________________________________________"
+	echo 
+	echo 
+	echo "Time to clean everything up"
+	cd ..
+	rm -r BashRange_Files 
+	echo
+	echo "All done now"
+	echo "Hope this helps, good luck"
+	echo "                 xoxo Ugly"
+	
+	
+
+
+
+
+
+
+
+
+

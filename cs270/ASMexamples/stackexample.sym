@@ -1,0 +1,10 @@
+// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+//	FOO               300E
+//	A                 300A
+//	B                 300B
+//	C                 300C
+//	MAIN              3000
+//	STACK             300D
