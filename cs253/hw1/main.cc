@@ -36,6 +36,7 @@ string censor(string text) {
     }
     return text;
 }
+
 void error(string name,string wrong) {
     cerr << "There was a error in " << name << " : "  << wrong <<"\n";
     return;
