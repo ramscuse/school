@@ -184,10 +184,10 @@ int main (int argc, char* argv[]) {
                         block = "";
                     }
                 }
-                for (auto i = 0; i != blocks.size(); i++) {
-                    cout << blocks[i] << "|";
-                }
-                cout << "\n";
+                // for (auto i = 0; i != blocks.size(); i++) {
+                //     cout << blocks[i] << "|";
+                // }
+                // cout << "\n";
 
                 vector<char*> res = blockCipherDecrypt(blocks,key);
 
