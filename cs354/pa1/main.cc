@@ -68,10 +68,10 @@ vector<char*> blockCipherDecrypt(vector<char*> & blocks, string key) {
         }
     }
 
-    for (auto i = 0; i != blocks.size(); i++) {
-        cout << blocks[i] << "|";
-    }
-    cout << "\n";
+    // for (auto i = 0; i != blocks.size(); i++) {
+    //     cout << blocks[i] << "|";
+    // }
+    // cout << "\n";
     return blocks;
 }
 
@@ -86,10 +86,7 @@ void streamCipher(string text, string key, ofstream& out) {
             keycount = 0;
         }
     }
-
-    cout << res << "\n";
     out << res << "\n";
-    
 }
 
 
@@ -131,8 +128,6 @@ int main (int argc, char* argv[]) {
     }
     getline(in2, key);
 
-    vector<char*> blocks;
-
     if (cipherfunc == "S") {
         while (getline(in,text)) {
             streamCipher(text, key, out);
@@ -141,6 +136,7 @@ int main (int argc, char* argv[]) {
         if (mode == "E") {
             string block = "";
             while(getline(in,text)) {
+                vector<char*> blocks;
                 for (int i = 0; i < text.length(); i++) {
                     block += text[i];
                     if (block.length() == 16) {
@@ -163,12 +159,16 @@ int main (int argc, char* argv[]) {
                 //     cout << blocks[i] << "|";
                 // }
                 // cout << "\n";
-
                 blockCipherEncrypt(blocks,key,out);
+                for (int i = 0; i < blocks.size(); i++) {
+                    free(blocks[i]);
+                }
+                block = "";
             }
         } else if (mode == "D") {
             string block = "";
             while(getline(in,text)) {
+                vector<char*> blocks;
                 for (int i = 0; i < text.length(); i++) {
                     block += text[i];
                     if (block.length() == 16) {
@@ -196,15 +196,16 @@ int main (int argc, char* argv[]) {
                 }
 
                 out << removepad(res[res.size()-1]);
+                out << "\n";
+
+                for (int i = 0; i < blocks.size(); i++) {
+                    free(blocks[i]);
+                }
             }
         } else {
             error(program, "Bad Arguements " + mode);
             return -1;
         }
-    }
-
-    for (int i = 0; i < blocks.size(); i++) {
-        free(blocks[i]);
     }
 
     return 0;
