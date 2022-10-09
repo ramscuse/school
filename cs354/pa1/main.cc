@@ -86,7 +86,7 @@ void streamCipher(string text, string key, ofstream& out) {
             keycount = 0;
         }
     }
-    out << res << "\n";
+    out << res;
 }
 
 
@@ -112,7 +112,7 @@ int main (int argc, char* argv[]) {
     }
 
     string key;
-    string text;
+    string text = "";
     ifstream in(ifile);
     ifstream in2(kfile);
     ofstream out(ofile);
@@ -129,9 +129,11 @@ int main (int argc, char* argv[]) {
     getline(in2, key);
 
     if (cipherfunc == "S") {
-        while (getline(in,text)) {
-            streamCipher(text, key, out);
+        while (in) {
+            text += in.get();
         }
+        text = text.substr(0, text.size()-1);
+        streamCipher(text, key, out);
     } else if(cipherfunc == "B") {
         if (mode == "E") {
             string block = "";

@@ -1,0 +1,4 @@
+# Jameson Walter PA1
+# I have noticed a small problem when testing block cipher
+# but that problem goes away when you run the program through
+# valgrind and I can't find any syntax errors.
