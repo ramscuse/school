@@ -1,4 +1,10 @@
 # Jameson Walter PA1
-# I have noticed a small problem when testing block cipher
-# but that problem goes away when you run the program through
-# valgrind and I can't find any syntax errors.
+# To run the program, have the Makefile and main.cc in a directory.
+# Type the following commands into the terminal:
+# make
+# ./main (followed by 5 aguements listed below)
+# arg1 - B (Block Cipher) or S (Stream Cipher)
+# arg2 - input file containing the plaintext or ciphertext
+# arg3 - output file
+# arg4 - input file containing the key
+# arg5 - E (Encrypt) or D (Decrypt)

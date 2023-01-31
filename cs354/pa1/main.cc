@@ -11,68 +11,71 @@ void error(string name,string wrong) {
     return;
 }
 
-char* pad(string block) {
-    char* blockLoc = (char*) malloc(16*sizeof(char));
-    if (blockLoc == NULL) {
-        error("padding", "Problem allocating blocks");
-        return NULL;
+void blockCipherEncrypt(string text, string key, ofstream& out) {
+    int keycount = 0;
+    string res = text;
+
+    for (int i = 0; i < text.length(); i++) {
+        res[i] = (text[i] ^ key[keycount]);
+        keycount += 1;
+        if (keycount == key.length()) {
+            keycount = 0;
+        }
     }
-    for (int i = 0; i < 16; i ++) {
-        blockLoc[i] = 0x81;
+
+    int start = 0;
+    int end = res.length() -1;
+    keycount = 0;
+    while (start < end) {
+        if (key[keycount]%2 == 0) {
+            start += 1;
+        } else {
+            char temp = res[start];
+            res[start] = res[end];
+            res[end] = temp;
+            start += 1;
+            end -= 1;
+        }
+        keycount += 1;
+        if (keycount == key.length()) {
+            keycount = 0;
+        }
     }
-    for (int j = 0; j < block.length(); j++) {
-        blockLoc[j] = block[j];
-    }
-    return blockLoc;
+
+    out << res;
 }
 
-string removepad(char* block) {
-    string res = "";
-    
-    for (int i = 0; i < 16; i ++) {
-        if (block[i] != -127) {
-            res += block[i];
+string blockCipherDecrypt(string text, string key) {
+    int start = 0;
+    int end = text.length() -1;
+    int keycount = 0;
+    while (start < end) {
+        if (key[keycount]%2 == 0) {
+            start += 1;
+        } else {
+            char temp = text[start];
+            text[start] = text[end];
+            text[end] = temp;
+            start += 1;
+            end -= 1;
+        }
+        keycount += 1;
+        if (keycount == key.length()) {
+            keycount = 0;
+        }
+    }
+
+    string res = text;
+    keycount = 0;
+    for (int i = 0; i < text.length(); i++) {
+        res[i] = (text[i] ^ key[keycount]);
+        keycount += 1;
+        if (keycount == key.length()) {
+            keycount = 0;
         }
     }
 
     return res;
-}
-
-void blockCipherEncrypt(vector<char*> & blocks, string key, ofstream& out) {
-    int keycount = 0;
-
-    for (int i = 0; i != blocks.size(); i++) {
-        for (int j = 0; j < 16; j++) {
-            blocks[i][j] = blocks[i][j] ^ key[keycount];
-            if (keycount == key.length()) {
-                keycount = 0;
-            }
-        }
-    }
-
-    for (auto i = 0; i != blocks.size(); i++) {
-        out << blocks[i];
-    }
-    out << "\n";
-}
-
-vector<char*> blockCipherDecrypt(vector<char*> & blocks, string key) {
-    int keycount = 0;
-
-    for (int i = 0; i != blocks.size(); i++) {
-        for (int j = 0; j < 16; j++) {
-            blocks[i][j] = blocks[i][j] ^ key[keycount];
-            if (keycount == key.length()) {
-                keycount = 0;
-            }
-        }
-    }
-
-    // for (auto i = 0; i != blocks.size(); i++) {
-    //     cout << blocks[i] << "|";
-    // }
-    // cout << "\n";
-    return blocks;
 }
 
 void streamCipher(string text, string key, ofstream& out) {
@@ -128,82 +131,36 @@ int main (int argc, char* argv[]) {
     }
     getline(in2, key);
 
+    while (in) {
+        text += in.get();
+    }
+    text = text.substr(0, text.size()-1);
+
     if (cipherfunc == "S") {
-        while (in) {
-            text += in.get();
-        }
-        text = text.substr(0, text.size()-1);
         streamCipher(text, key, out);
     } else if(cipherfunc == "B") {
         if (mode == "E") {
-            string block = "";
-            while(getline(in,text)) {
-                vector<char*> blocks;
-                for (int i = 0; i < text.length(); i++) {
-                    block += text[i];
-                    if (block.length() == 16) {
-                        char* blockLoc = (char*) malloc(16*sizeof(char));
-                        if (blockLoc == NULL) {
-                            error(program, "Problem allocating blocks");
-                            return -1;
-                        }
-                        for (int j = 0; j < 16; j++) {
-                            blockLoc[j] = block[j];
-                        }
-                        blocks.push_back(blockLoc);
-                        block = "";
-                    }
+
+            int padc = 16 - (text.length() % 16);
+            if (padc < 16) {
+                for (int i = 0; i < padc; i++) {
+                    text += static_cast<char>(0x81);
                 }
-                if (block.length() > 0) {
-                    blocks.push_back(pad(block));
-                }
-                // for (auto i = 0; i != blocks.size(); i++) {
-                //     cout << blocks[i] << "|";
-                // }
-                // cout << "\n";
-                blockCipherEncrypt(blocks,key,out);
-                for (int i = 0; i < blocks.size(); i++) {
-                    free(blocks[i]);
-                }
-                block = "";
             }
+            blockCipherEncrypt(text,key,out);
+
         } else if (mode == "D") {
-            string block = "";
-            while(getline(in,text)) {
-                vector<char*> blocks;
-                for (int i = 0; i < text.length(); i++) {
-                    block += text[i];
-                    if (block.length() == 16) {
-                        char* blockLoc = (char*) malloc(16*sizeof(char));
-                        if (blockLoc == NULL) {
-                            error(program, "Problem allocating blocks");
-                            return -1;
-                        }
-                        for (int j = 0; j < 16; j++) {
-                            blockLoc[j] = block[j];
-                        }
-                        blocks.push_back(blockLoc);
-                        block = "";
-                    }
-                }
-                // for (auto i = 0; i != blocks.size(); i++) {
-                //     cout << blocks[i] << "|";
-                // }
-                // cout << "\n";
 
-                vector<char*> res = blockCipherDecrypt(blocks,key);
-
-                for (int i = 0; i < res.size() - 1; i++) {
-                    out << res[i];
-                }
-
-                out << removepad(res[res.size()-1]);
-                out << "\n";
-
-                for (int i = 0; i < blocks.size(); i++) {
-                    free(blocks[i]);
+            string plaintext = blockCipherDecrypt(text,key);
+            int loc;
+            for (int i = 0; i < plaintext.length(); i++) {
+                if (plaintext[i] != static_cast<char>(0x81)) {
+                    loc = i;
                 }
             }
+            plaintext = plaintext.substr(0,loc+1);
+            out << plaintext;
+            
         } else {
             error(program, "Bad Arguements " + mode);
             return -1;
