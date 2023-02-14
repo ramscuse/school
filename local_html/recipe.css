@@ -1,0 +1,67 @@
+body { 
+    font-family: Arial, Helvetica, serif; 
+    background-color: #a58245ae;
+    margin: 0;
+}
+
+header {
+    text-align: center;
+}
+header h1 {
+    font-family: Arial, Helvetica, sans-serif; 
+    text-shadow: 0.5px 1.5px rgba(56, 56, 56, 0.741); 
+}
+
+.nav-ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #2C363F;
+}
+.nav-ul li {
+    float: left;
+}
+.nav-ul .git {
+    float: right;
+}
+.nav-ul li a {
+    display: block;
+    color: #F2F5EA;
+    text-align: center;
+    padding: 20px 25px;
+    text-decoration: none;
+}
+.nav-ul li .open {
+    color: #2C363F;
+    background-color: #BBC7A4;
+}
+.nav-ul li a:hover {
+    color: #2C363F;
+    background-color: #D6DBD2;
+}
+.dropdown .dropbtn {
+    padding: 20px 25px;
+    color: #F2F5EA;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #2C363F;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+.dropdown-content a {
+    padding: 20px 25px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+.dropdown .dropbtn:hover {
+    color: #2C363F;
+    background-color: #D6DBD2;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
