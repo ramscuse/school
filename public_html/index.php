@@ -38,6 +38,5 @@
 
     <footer>
         <h3>PUBLIC</h3>
-            <p>This file should be found through cs.colostate.edu/~EID/</p>
     </footer>
 </html>

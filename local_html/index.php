@@ -38,6 +38,5 @@
 
     <footer>
         <h3>LOCAL</h3>
-            <p>This file should be found through cs.colostate.edu:4444/~EID/</p>
     </footer>
 </html>
