@@ -16,6 +16,7 @@
 
     <body>
         <div>
+            <!-- Add logo here -->
             <p></p>
             <p>Welcome to Our CS312 Project Home Page</p>
         </div>
