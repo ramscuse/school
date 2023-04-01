@@ -2,21 +2,23 @@
 <html>
     <head>
         <style>
-            body img {
+            header img {
                 display: block;
                 margin-left: auto;
                 margin-right: auto;
+                width: 800px;
+                height: 150px;
             }
         </style>
     </head>
 
     <header>
-        <h1>CodeLink</h1>
+        <?php echo Asset::img('logo.png', array('id' => 'logo')); ?>
+        <!-- <img src="../assets/img/logo.png" style="object-fit:fill; width:900px; height:300px;" alt="logo"> -->
     </header>
 
     <body>
         <div>
-            <!-- Add logo here -->
             <p></p>
             <p>Welcome to Our CS312 Project Home Page</p>
         </div>
