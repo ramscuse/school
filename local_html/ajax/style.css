@@ -1,0 +1,83 @@
+body { 
+  font-family: Arial, Helvetica, serif; 
+  background-color: #1098ddae;
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+}
+
+.product {
+  text-align: center;;
+  background-color: rgb(17, 138, 231);
+  width: 300px;
+  height: 400px;
+  margin: 0 auto;
+}
+
+img {
+  display: block;
+  margin: auto;
+  width: 200px;
+  height: 200px;
+}
+
+.price {
+  margin: 1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+h4 {
+  margin-bottom: 5px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+  
+li {
+  margin-bottom: 2px;
+}
+
+footer {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  background-color: #8b87fc;
+  text-align: center;
+}
+
+
+.dropdown .dropbtn {
+  padding: 20px 25px;
+  background-color: #0e40ae;
+  color: black;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content button {
+  padding: 10px 126px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown .dropbtn:hover {
+  color: #2C363F;
+  background-color: #D6DBD2;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
