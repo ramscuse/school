@@ -27,7 +27,7 @@
         <div>
             <div class="flex-container">
                 <div>
-                    <img src="https://www.nicepng.com/png/detail/145-1451818_drawing-adventure-bmo-adventure-time-bmo-drawing.png" style="object-fit:fill; width:300px; height:300px;" alt="Photo of BMO">
+                    <img src="../../assets/img/jameson.jpg" style="object-fit:fill; width:300px; height:300px;" alt="Photo of Jameson W">
                     <h4>Jameson W</h4>
                     <p>I am a student at CSU studying comupter science with a concentration in software engineering. I play video games and basketball in my free time.</p>
                 </div>
