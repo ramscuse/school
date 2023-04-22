@@ -1,0 +1,93 @@
+.header {
+    height: 90px;
+    width: 100%;
+}
+
+header h1 {
+    float: left;
+}
+
+.step {
+    float: right;
+    padding: 10px;
+    color: white;
+    background-color: black;
+}
+
+.body {
+    margin: auto;
+    width: 90%;
+}
+
+.striptable, .striptable th, .striptable td {
+    border: 2px solid;
+}
+
+.striptable {
+    margin: auto;
+    margin-top: 50px;
+}
+
+.striptable td {
+    width: 50px;
+    height: 50px;
+}
+
+.striptable #selected {
+    border: 2px dashed;
+}
+
+.maintable, .maintable th, .maintable td {
+    border: 1px solid;
+    border-color: grey;
+}
+
+.maintable {
+    margin: auto;
+    margin-top: 50px;
+}
+
+.maintable td {
+    width: 50px;
+    height: 50px;
+}
+
+.black {
+    background-color: black;
+}
+
+.red {
+    background-color: red;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.green {
+    background-color: green;
+}
+
+.purple {
+    background-color: purple;
+}
+
+.orange {
+    background-color: orange;
+}
+
+.cyan {
+    background-color: cyan;
+}
+
+.magenta {
+    background-color: magenta;
+}
+
+.grey {
+    background-color: grey;
+}
