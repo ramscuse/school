@@ -5,6 +5,7 @@ $("document").ready(() => {
             $(this).click(() => {
                 $('.striptable #selected').attr('id', 'notselected')
                 $(this).attr('id', 'selected');
+                changeAllColor($(this).attr('class'));
             });
         })
     })
@@ -12,16 +13,15 @@ $("document").ready(() => {
     $('.maintable tr').each(function(){
         $(this).find('td').each(function(){
             $(this).click(() => {
+                var color = $('.striptable #selected').attr('class')
                 var id  = $(this).attr('id');
                 var row = parseInt(id.substring(0,2));
                 var col = parseInt(id.substring(2,4));
 
-                alert("hello")
-
                 if ($(this).attr('class')) {
                     $(this).removeAttr('class')
                 } else {
-                    $(this).attr('class', 'blue');
+                    $(this).attr('class', color);
                 }
 
                 var above = '#'+getabove(row,col);
@@ -29,10 +29,10 @@ $("document").ready(() => {
                 var right = '#'+getright(row,col);
                 var left = '#'+getleft(row,col);
 
-                changeColor(id,above, 'blue');
-                changeColor(id,below, 'blue');
-                changeColor(id,right, 'blue');
-                changeColor(id,left, 'blue');
+                changeColor('#'+id,above, color);
+                changeColor('#'+id,below, color);
+                changeColor('#'+id,right, color);
+                changeColor('#'+id,left,  color);
             });
         })
     })
@@ -73,12 +73,21 @@ $("document").ready(() => {
         }
     }
     function changeColor(cur, loc, color) {
-        if (cur !== loc) {
+        if(cur !== loc) {
             if ($(loc).attr('class')) {
                 $(loc).removeAttr('class')
             } else {
                 $(loc).attr('class', color);
             }
         }
+    }
+    function changeAllColor(color) {
+        $('.maintable tr').each(function(){
+            $(this).find('td').each(function(){
+                if ($(this).attr('class')) {
+                    $(this).attr('class',color);
+                } 
+            })
+        })
     }
 });
