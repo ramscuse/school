@@ -42,6 +42,27 @@
                 display: block;
             }
         </style>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script>
+            function update() {
+                var size = document.getElementById("size").value;
+                var colors = document.getElementById("color").value;
+                var url = new URL(window.location.href);
+                var search_params = url.searchParams;
+
+                search_params.set('size',size);
+                search_params.set('colors',colors);
+
+                url.search = search_params.toString();
+
+                var new_url = new URL(url.toString());
+
+                location.href = new_url;
+            }
+            $("document").ready(() => {
+                
+            });
+        </script>
     </head>
 
     <header>
@@ -52,8 +73,11 @@
         <div class="body">
             <?php
                 if (isset($size) && isset($coloramount)) {
-                    echo '<p>Size of Table: '.$size.'</p>';
-                    echo '<p>Amount of Color Choices: '.$coloramount.'</p>';
+                    echo '<label for="size">Size: </label>';
+                    echo '<input type="text" id="size" name="size" value="'.$size.'">';
+                    echo '<label for="color">Color Amount: </label>';
+                    echo '<input type="text" id="color" name="color" value="'.$coloramount.'">';
+                    echo '<button onclick="update()">Update</button>';
 
                     echo '<table class="table-color">';
                     for ($i = 0; $i < $coloramount; $i++) {
@@ -93,7 +117,16 @@
                     echo '</table>';
                 }
             ?>
-            <?php echo isset($error) ? '<h2>'.$error.'</h2>' : '' ?>
+            <?php 
+                if (isset($error)) {
+                    echo '<h2>'.$error.'</h2>';
+                    echo '<label for="size">Size: </label>';
+                    echo '<input type="text" id="size" name="size" value="">';
+                    echo '<label for="color">Color Amount: </label>';
+                    echo '<input type="text" id="color" name="color" value="">';
+                    echo '<button onclick="update()">Update</button>';
+                }
+        ?>
         </div>
     </body>
 
