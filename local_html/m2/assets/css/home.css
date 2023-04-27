@@ -1,12 +1,12 @@
-body { 
-    font-family: Arial, Helvetica, serif; 
+body {
+    font-family: Arial, Helvetica, serif;
     background-color: #3A506B;
     color: white;
     margin: 0;
 }
 
-body div {
-    padding-bottom: 50px;
+body > main {
+    padding: 25px;
     width: 1000px;
     margin:auto;
     background-color: #5BC0BE;
@@ -15,10 +15,11 @@ body div {
 
 header {
     text-align: center;
+    margin: 25px auto;
 }
 header h1 {
-    font-family: Arial, Helvetica, sans-serif; 
-    text-shadow: 0.5px 1.5px rgba(56, 56, 56, 0.741); 
+    font-family: Arial, Helvetica, sans-serif;
+    text-shadow: 0.5px 1.5px rgba(56, 56, 56, 0.741);
 }
 
 footer {

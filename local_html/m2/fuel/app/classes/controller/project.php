@@ -23,7 +23,20 @@ class Controller_Project extends Controller_Template
 		$this->template->coloramount = $this->defaultColor;
 
 
-        $this->template->content=View::forge('project/index');
+		$this->template->content=View::forge('project/index');
+	}
+
+	public function action_404()
+	{
+		$this->template->title = 'OOPSIE WOOPSIE!!';
+		$this->template->home = '';
+		$this->template->about = '';
+		$this->template->color = '';
+		$this->template->css = 'home.css';
+		$this->template->size = $this->defaultSize;
+		$this->template->coloramount = $this->defaultColor;
+
+		$this->template->content=View::forge('project/404');
 	}
 
 	public function action_about()
@@ -36,7 +49,7 @@ class Controller_Project extends Controller_Template
 		$this->template->size = $this->defaultSize;
 		$this->template->coloramount = $this->defaultColor;
 
-        $this->template->content=View::forge('project/about');
+		$this->template->content=View::forge('project/about');
 	}
 
 	public function action_color()
@@ -46,7 +59,7 @@ class Controller_Project extends Controller_Template
 		$this->template->home = '';
 		$this->template->about = '';
 		$this->template->color = 'class=open';
-		$this->template->css = 'colors.css';
+		$this->template->css = 'home.css';
 		$this->template->size = $this->defaultSize;
 		$this->template->coloramount = $this->defaultColor;
 

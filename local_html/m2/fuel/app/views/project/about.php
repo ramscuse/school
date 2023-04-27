@@ -24,30 +24,30 @@
     </header>
 
     <body>
-        <div>
+        <main>
             <div class="flex-container">
                 <div>
-                    <img src="../../assets/img/jameson.jpg" style="object-fit:fill; width:300px; height:300px;" alt="Photo of Jameson W">
+                    <img src='<?php echo Asset::get_file('jameson.jpg', 'img');?>'style="object-fit:fill; width:300px; height:300px;" alt="Photo of Jameson W">
                     <h4>Jameson W</h4>
                     <p>I am a student at CSU studying comupter science with a concentration in software engineering. I play video games and basketball in my free time.</p>
                 </div>
                 <div>
-                    <img src="../../assets/img/bengine.jpg" style="object-fit:fill; width:300px; height:300px;" alt="Photo of Benjamin P standing next to a hoisted car engine">
+                    <img src='<?php echo Asset::get_file('bengine.jpg', 'img');?>'style="object-fit:fill; width:300px; height:300px;" alt="Photo of Benjamin P standing next to a hoisted car engine">
                     <h4>Benjamin P</h4>
                     <p>I am a CSU computer science student and UNIX enthusiast.  I'm a general taker-aparter of things and a massive nerd.  I spend most of my time either sleeping, disassembling vacuum cleaners, or obsessively tweaking my dotfiles.</p>
                 </div>
                 <div>
-                    <img src="../../assets/img/nael.jpg" style="object-fit:fill; width:300px; height:300px;" alt="Photo of BMO">
+                    <img src='<?php echo Asset::get_file('nael.jpg', 'img');?>'style="object-fit:fill; width:300px; height:300px;" alt="Photo of BMO">
                     <h4>Nael Eyob</h4>
                     <p>I am a student at CSU majoring in computer science. I Spend most of my free time playing sports, video games, or learning about pen testing.</p>
                 </div>
                 <div>
-                    <img src="../../assets/img/andrew.jpeg" style="object-fit:fill; width:300px; height:300px;" alt="Photo of Andrew">
+                    <img src='<?php echo Asset::get_file('andrew.jpeg', 'img');?>'style="object-fit:fill; width:300px; height:300px;" alt="Photo of Andrew">
                     <h4>Andrew Borchert</h4>
                     <p>I am a third year computer science major with a concentration in networks and security. I enjoy sports, video games, and playing guitar in my free time.</p>
                 </div>
             </div>
-        </div>
+        </main>
     </body>
 
     <footer>

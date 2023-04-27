@@ -60,7 +60,7 @@
                 location.href = new_url;
             }
             $("document").ready(() => {
-                
+
             });
         </script>
     </head>
@@ -70,14 +70,16 @@
     </header>
 
     <body>
-        <div class="body">
+        <main>
             <?php
                 if (isset($size) && isset($coloramount)) {
+                    echo '<div style=margin-bottom:25px;>';
                     echo '<label for="size">Size: </label>';
                     echo '<input type="text" id="size" name="size" value="'.$size.'">';
                     echo '<label for="color">Color Amount: </label>';
                     echo '<input type="text" id="color" name="color" value="'.$coloramount.'">';
                     echo '<button onclick="update()">Update</button>';
+                    echo '</div>';
 
                     echo '<table class="table-color">';
                     for ($i = 0; $i < $coloramount; $i++) {
@@ -117,7 +119,7 @@
                     echo '</table>';
                 }
             ?>
-            <?php 
+            <?php
                 if (isset($error)) {
                     echo '<h2>'.$error.'</h2>';
                     echo '<label for="size">Size: </label>';
@@ -127,7 +129,7 @@
                     echo '<button onclick="update()">Update</button>';
                 }
         ?>
-        </div>
+        </main>
     </body>
 
     <footer>
