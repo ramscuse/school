@@ -4,18 +4,27 @@
         <style>
             table {
                 color: black;
-                border: 1px solid;
-                border-collapse: collapse;
                 width: 100%;
             }
-            table, tr, td {
+            tr, td {
                 border: 1px solid;
             }
             .table-color .left{
                 width: 20%;
             }
             .table-color .right{
-                width: 80%;
+                width: 70%;
+            }
+            .table-color .radio{
+                border: none;
+            }
+            .table-paint {
+                border: 1px solid;
+                border-collapse: collapse;
+            }
+            .table-paint td{
+                width : 200px;
+                height : 40px;
             }
             .dropdown .dropbtn {
                 padding: 20px 25px;
@@ -29,7 +38,9 @@
                 z-index: 1;
             }
             .dropdown-content p {
-                padding: 20px 25px;
+                border: 1px solid;
+                padding: 5px 50px;
+                margin: 0;
                 text-decoration: none;
                 display: block;
                 text-align: left;
@@ -60,7 +71,27 @@
                 location.href = new_url;
             }
             $("document").ready(() => {
-
+                $('.table-color tr .dropdown').each(function() {
+                    $(this).find('div p').each(function() {
+                        $(this).click(() => {
+                            color = $(this).attr('href');
+                            colorname = $(this).attr('class')
+                            id = $(this).attr('id');
+                            $('.table-color .right').each(function() {
+                                if (id === $(this).attr('id')) {
+                                    $(this).css('background-color', color);
+                                    $(this).attr('color',colorname)
+                                }
+                            })
+                        })
+                    })
+                })
+                // Not Implemented Yet
+                function colorClick(color) {
+                    $('.'+color).each(() => {
+                        $(this).attr('selected','true');
+                    })
+                }
             });
         </script>
     </head>
@@ -82,24 +113,30 @@
                     echo '</div>';
 
                     echo '<table class="table-color">';
+                    echo '<form>';
                     for ($i = 0; $i < $coloramount; $i++) {
                         echo '<tr>';
-                        echo '<td class="dropdown">';
+                        echo '<td id='.$i.' class="dropdown">';
                         echo '<div class=dropbtn>Color</div>';
                         echo '<div class="dropdown-content">';
                         foreach ($colors as $name => $val) {
-                            echo '<p href="'.$val.'">'.$name.'</p>';
+                            echo '<p class="'.$name.'" id="'.$i.'" href="'.$val.'">'.$name.'</p>';
                         }
                         echo '</div>';
                         echo '</td>';
-                        echo '<td class="right">selected choice</td>';
+                        echo '<td id="'.$i.'"class="right">';
+                        echo '</td>';
+                        echo '<td class="radio">';
+                        echo '<input type="radio" id="'.$i.'" name="color-select"></input>';
+                        echo '</td>';
                         echo '</tr>';
                     }
+                    echo '</form>';
                     echo '</table>';
 
                     echo '</br>';
 
-                    echo '<table>';
+                    echo '<table class="table-paint">';
                     for ($i = 0; $i <= $size; $i++) {
                         echo '<tr>';
                         for ($j = 0; $j <= $size; $j++) {
@@ -111,7 +148,7 @@
                             } else if ($j == 0) {
                                 echo '<td>'.$i.'</td>';
                             } else {
-                                echo '<td>test</td>';
+                                echo '<td></td>';
                             }
                         }
                         echo '</tr>';
