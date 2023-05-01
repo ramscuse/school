@@ -70,6 +70,14 @@
 
                 location.href = new_url;
             }
+            function radioValue() {
+                var rad = document.getElementsByName('color-select');
+                for (i = 0; i < rad.length; i++) {
+                    if (rad[i].checked) {
+                        return rad[i].value;
+                    }
+                }
+            }
             $("document").ready(() => {
                 $('.table-color tr .dropdown').each(function() {
                     $(this).find('div p').each(function() {
@@ -83,6 +91,21 @@
                                     $(this).attr('color',colorname)
                                 }
                             })
+                            $('.table-color .radio input').each(function() {
+                                if (id === $(this).attr('id')) {
+                                    $(this).attr('value',color)
+                                }
+                            })
+                        })
+                    })
+                })
+                $('.table-paint tr').each(function() {
+                    $(this).find('.clickable').each(function() {
+                        $(this).click(() => {
+                            val = radioValue();
+                            if (val != 'on') {
+                                $(this).css('background-color',val);
+                            }
                         })
                     })
                 })
@@ -127,7 +150,11 @@
                         echo '<td id="'.$i.'"class="right">';
                         echo '</td>';
                         echo '<td class="radio">';
-                        echo '<input type="radio" id="'.$i.'" name="color-select"></input>';
+                        if ($i == 0) {
+                            echo '<input type="radio" id="'.$i.'" name="color-select" checked="checked"></input>';
+                        } else {
+                            echo '<input type="radio" id="'.$i.'" name="color-select"></input>';
+                        }
                         echo '</td>';
                         echo '</tr>';
                     }
@@ -148,7 +175,7 @@
                             } else if ($j == 0) {
                                 echo '<td>'.$i.'</td>';
                             } else {
-                                echo '<td></td>';
+                                echo '<td class="clickable"></td>';
                             }
                         }
                         echo '</tr>';
