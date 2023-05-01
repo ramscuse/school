@@ -89,7 +89,7 @@ class Controller_Project extends Controller_Template
 				$this->template->content=View::forge('project/color',$data);
 			}
 		} else {
-			$data['error'] = "Error: Must Provide paramenters";
+			$data['error'] = "Error: Must Provide parameters";
 			$this->template->content=View::forge('project/color',$data);
 		}
 	}

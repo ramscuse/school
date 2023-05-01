@@ -24,8 +24,4 @@
             <p>We look forward to working with one another and with our classmates to deliver a successful project. Thank you for this opportunity to collaborate and learn together.</p>
         </main>
     </body>
-
-    <footer>
-        <h3>LOCAL FUEL</h3>
-    </footer>
 </html>

@@ -16,3 +16,7 @@
 <body>
     <?php echo $content;?>
 </body>
+
+<footer>
+  LOCAL FUEL
+</footer>

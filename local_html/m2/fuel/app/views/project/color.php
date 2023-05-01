@@ -195,8 +195,4 @@
         ?>
         </main>
     </body>
-
-    <footer>
-        <h3>LOCAL FUEL</h3>
-    </footer>
 </html>
