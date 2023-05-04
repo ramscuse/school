@@ -2,6 +2,9 @@
 <html>
     <head>
         <style>
+            header img {
+                display:none;
+            }
             table {
                 color: black;
                 width: 100%;
@@ -51,6 +54,32 @@
             }
             .dropdown:hover .dropdown-content {
                 display: block;
+            }
+            @media print {
+                .nav-ul {
+                    display:none;
+                }
+                footer {
+                    display:none;
+                }
+                header h1{
+                    display:none;
+                }
+                header img {
+                    display:block;
+                }
+                .noPrint {
+                    display:none;
+                }
+                .table-color {
+                    print-color-adjust: exact; 
+                }
+                .table-color .radio{
+                    display:none;
+                }
+                .table-paint td {
+                    print-color-adjust: exact; 
+                }
             }
         </style>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -121,22 +150,21 @@
 
     <header>
         <h1>Color Coordinate Generator</h1>
+        <?php echo Asset::img('logo.png', array('id' => 'logo')); ?>
     </header>
 
     <body>
         <main>
             <?php
                 if (isset($size) && isset($coloramount)) {
-                    echo '<div style=margin-bottom:25px;>';
+                    echo '<div class="noPrint" style=margin-bottom:25px;>';
                     echo '<label for="size">Size: </label>';
                     echo '<input type="text" id="size" name="size" value="'.$size.'">';
                     echo '<label for="color">Color Amount: </label>';
                     echo '<input type="text" id="color" name="color" value="'.$coloramount.'">';
                     echo '<button onclick="update()">Update</button>';
                     echo '</div>';
-
                     echo '<table class="table-color">';
-                    echo '<form>';
                     for ($i = 0; $i < $coloramount; $i++) {
                         echo '<tr>';
                         echo '<td id='.$i.' class="dropdown">';
@@ -158,22 +186,19 @@
                         echo '</td>';
                         echo '</tr>';
                     }
-                    echo '</form>';
                     echo '</table>';
-
                     echo '</br>';
-
                     echo '<table class="table-paint">';
                     for ($i = 0; $i <= $size; $i++) {
                         echo '<tr>';
                         for ($j = 0; $j <= $size; $j++) {
                             if ($i == 0 && $j ==0) {
-                                echo '<td></td>';
+                                echo '<td class="noPrint"></td>';
                             } else if ($i == 0) {
                                 $letter = chr($j+64);
-                                echo '<td>'.$letter.'</td>';
+                                echo '<td class="noPrint">'.$letter.'</td>';
                             } else if ($j == 0) {
-                                echo '<td>'.$i.'</td>';
+                                echo '<td class="noPrint">'.$i.'</td>';
                             } else {
                                 echo '<td class="clickable"></td>';
                             }
@@ -181,6 +206,8 @@
                         echo '</tr>';
                     }
                     echo '</table>';
+                    echo '</br>';
+                    echo '<button class="noPrint" onclick="window.print();">Print View</button>';
                 }
             ?>
             <?php
