@@ -1,0 +1,6 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Sun Mar 03 20:00:02 MST 2024
+spark-core-2.9.4-javadoc.jar>central=
+spark-core-2.9.4.pom>central=
+spark-core-2.9.4.jar>central=
+spark-core-2.9.4-sources.jar>central=
