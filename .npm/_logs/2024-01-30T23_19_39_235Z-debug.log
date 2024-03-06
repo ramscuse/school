@@ -1,0 +1,33 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/bin/npm', 'run', 'build' ]
+2 info using npm@6.14.16
+3 info using node@v12.22.12
+4 verbose run-script [ 'prebuild', 'build', 'postbuild' ]
+5 info lifecycle company_management@0.1.0~prebuild: company_management@0.1.0
+6 info lifecycle company_management@0.1.0~build: company_management@0.1.0
+7 verbose lifecycle company_management@0.1.0~build: unsafe-perm in lifecycle true
+8 verbose lifecycle company_management@0.1.0~build: PATH: /usr/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:/s/parsons/g/under/ramscuse/cs415/t04/client/node_modules/.bin:/s/parsons/g/under/ramscuse/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:.
+9 verbose lifecycle company_management@0.1.0~build: CWD: /s/parsons/g/under/ramscuse/cs415/t04/client
+10 silly lifecycle company_management@0.1.0~build: Args: [ '-c', 'react-scripts build' ]
+11 info lifecycle company_management@0.1.0~build: Failed to exec build script
+12 verbose stack Error: company_management@0.1.0 build: `react-scripts build`
+12 verbose stack spawn ENOENT
+12 verbose stack     at ChildProcess.<anonymous> (/usr/lib/node_modules/npm/node_modules/npm-lifecycle/lib/spawn.js:48:18)
+12 verbose stack     at ChildProcess.emit (events.js:314:20)
+12 verbose stack     at maybeClose (internal/child_process.js:1022:16)
+12 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:287:5)
+13 verbose pkgid company_management@0.1.0
+14 verbose cwd /s/parsons/g/under/ramscuse/cs415/t04/client
+15 verbose Linux 4.18.0-513.9.1.el8_9.x86_64
+16 verbose argv "/usr/bin/node" "/bin/npm" "run" "build"
+17 verbose node v12.22.12
+18 verbose npm  v6.14.16
+19 error code ELIFECYCLE
+20 error syscall spawn
+21 error file sh
+22 error errno ENOENT
+23 error company_management@0.1.0 build: `react-scripts build`
+23 error spawn ENOENT
+24 error Failed at the company_management@0.1.0 build script.
+24 error This is probably not a problem with npm. There is likely additional logging output above.
+25 verbose exit [ 1, true ]
